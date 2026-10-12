@@ -1,0 +1,76 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="404 - Pagina nu a fost găsită"
+  description="Pagina pe care o căutați nu există sau a fost mutată."
+  noindex={true}
+>
+  <section class="section error-section">
+    <div class="container text-center">
+      <div class="error-wrapper">
+        <span class="error-badge">Eroare 404</span>
+        <h1 class="error-code">404</h1>
+        <h2>Oops! Pagina nu a fost găsită</h2>
+        <p class="error-message">
+          Ne pare rău, pagina pe care o cauți nu există sau a fost mutată. Dar nu-ți face griji, nicio faptă bună și nicio căutare nu sunt irosite!
+        </p>
+        <div class="error-actions">
+          <a href="/" class="btn btn-primary">Înapoi acasă</a>
+          <a href="/proiecte/" class="btn btn-secondary">Vezi proiectele noastre</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .error-section {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3xl) 0;
+  }
+  .error-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .error-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full, 9999px);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: var(--space-md);
+  }
+  .error-code {
+    font-size: clamp(5rem, 15vw, 8rem);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--color-primary);
+    margin: 0 0 var(--space-sm);
+    letter-spacing: -0.05em;
+  }
+  .error-wrapper h2 {
+    font-size: 1.8rem;
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+  }
+  .error-message {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: var(--space-xl);
+  }
+  .error-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>

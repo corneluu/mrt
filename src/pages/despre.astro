@@ -1,0 +1,274 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import { getCollection } from 'astro:content';
+
+const membriEchipa = await getCollection('echipa');
+const sortatEchipa = membriEchipa.sort((a, b) => (a.data.ordine ?? 99) - (b.data.ordine ?? 99));
+
+const timeline = [
+  { an: '2020', titlu: 'Înființare', descriere: 'Un grup de tineri profesioniști din Timișoara decid să pună bazele asociației pentru a sprijini comunitățile defavorizate.' },
+  { an: '2021', titlu: 'Primul proiect major', descriere: 'Lansarea programului de distribuire a meselor calde și a pachetelor de primă necesitate.' },
+  { an: '2022', titlu: '100 de voluntari', descriere: 'Comunitatea crește accelerat, implicând peste 100 de voluntari activi în acțiunile lunare.' },
+  { an: '2023', titlu: 'Expansiune județeană', descriere: 'Extinderea campaniilor educaționale și de sănătate în mediul rural din județul Timiș.' },
+  { an: '2024', titlu: 'Parteneriate strategice', descriere: 'Dezvoltarea colaborărilor durabile cu companii locale și organizații internaționale.' },
+];
+---
+
+<BaseLayout title="Despre noi" description="Află mai multe despre misiunea, viziunea, echipa și istoria asociației Masa Rotundă Timișoara.">
+  <Hero
+    title="Despre noi"
+    subtitle="Cine suntem și ce ne motivează să aducem o schimbare pozitivă în fiecare zi"
+    showCTA={false}
+  />
+
+  <!-- Povestea noastră -->
+  <section class="section">
+    <div class="container content-container">
+      <SectionHeading title="Povestea noastră" subtitle="O inițiativă născută din dorința de a ajuta" />
+      <div class="story-content">
+        <p>
+          Masa Rotundă Timișoara a luat naștere din convingerea că nicio persoană din comunitatea noastră nu ar trebui să fie lăsată în urmă. În fața provocărilor sociale și a discrepanțelor din mediul urban și rural, am unit oameni dedicați, cu profesii și experiențe variate, dar cu o dorință comună: să oferim sprijin concret acolo unde este cea mai mare nevoie.
+        </p>
+        <p>
+          De-a lungul anilor, am transformat empatia în acțiune sistematică. Fie că oferim hrană caldă, rechizite școlare, servicii de asistență socială sau intervenții de prim ajutor, abordarea noastră pune mereu demnitatea umană în centrul fiecărui proiect. Credem într-o societate unită prin solidaritate activă și responsabilitate reciprocă.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Misiune, Viziune, Valori -->
+  <section class="section bg-alt">
+    <div class="container">
+      <SectionHeading title="Principiile noastre" subtitle="Fundația pe care ne construim fiecare inițiativă" />
+      <div class="grid-3">
+        <div class="card value-card">
+          <div class="value-icon">🎯</div>
+          <h3>Misiune</h3>
+          <p>Sprijinim persoanele vulnerabile din Timișoara și județul Timiș prin programe concrete și sustenabile de asistență socială, educație și sănătate.</p>
+        </div>
+        <div class="card value-card">
+          <div class="value-icon">🔭</div>
+          <h3>Viziune</h3>
+          <p>O comunitate solidară și rezilientă în care fiecare individ beneficiază de șanse egale, siguranță și un trai demn.</p>
+        </div>
+        <div class="card value-card">
+          <div class="value-icon">❤️</div>
+          <h3>Valori</h3>
+          <ul class="values-list">
+            <li><strong>Compasiune:</strong> Punem grija față de semeni în tot ceea ce facem.</li>
+            <li><strong>Transparență:</strong> Fiecare resursă este folosită responsabil și documentată deschis.</li>
+            <li><strong>Implicare:</strong> Răspundem proactiv nevoilor reale din comunitate.</li>
+            <li><strong>Respect:</strong> Ocrotim demnitatea fiecărui beneficiar.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Echipa -->
+  <section class="section">
+    <div class="container">
+      <SectionHeading title="Echipa noastră" subtitle="Oamenii pasionați din spatele inițiativelor Masa Rotundă" />
+      <div class="grid-3 team-grid">
+        {sortatEchipa.map(membru => (
+          <div class="card team-card">
+            <div class="team-avatar-wrapper">
+              {membru.data.imagine ? (
+                <img src={membru.data.imagine} alt={membru.data.nume} class="team-avatar" loading="lazy" />
+              ) : (
+                <div class="team-avatar-placeholder">
+                  <span>{membru.data.nume.split(' ').map(n => n[0]).join('')}</span>
+                </div>
+              )}
+            </div>
+            <div class="team-info">
+              <h3>{membru.data.nume}</h3>
+              <span class="team-role">{membru.data.rol}</span>
+              {membru.data.bio && <p class="team-bio">{membru.data.bio}</p>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline / Istorie -->
+  <section class="section bg-alt">
+    <div class="container content-container">
+      <SectionHeading title="Istoricul asociației" subtitle="Etapele dezvoltării noastre din 2020 până în prezent" />
+      <div class="timeline">
+        {timeline.map((item, index) => (
+          <div class="timeline-item">
+            <div class="timeline-badge">{item.an}</div>
+            <div class="timeline-content card">
+              <h3>{item.titlu}</h3>
+              <p>{item.descriere}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta-section">
+    <div class="container text-center">
+      <h2>Vino alături de noi</h2>
+      <p style="max-width: 600px; margin: var(--space-md) auto;">Fiecare voluntar și fiecare donator ne ajută să ajungem la mai mulți oameni care au nevoie de sprijin.</p>
+      <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+        <a href="/voluntariat/" class="btn btn-primary">Fii voluntar</a>
+        <a href="/donatii/" class="btn btn-accent">Donează acum</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .content-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .bg-alt {
+    background: var(--color-bg-alt);
+  }
+  .story-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+  }
+  .value-card {
+    text-align: left;
+    padding: var(--space-lg);
+  }
+  .value-icon {
+    font-size: 2.2rem;
+    margin-bottom: var(--space-sm);
+  }
+  .value-card h3 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-sm);
+  }
+  .values-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+  .values-list li {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .team-grid {
+    margin-top: var(--space-lg);
+  }
+  .team-card {
+    text-align: center;
+    padding: var(--space-lg);
+  }
+  .team-avatar-wrapper {
+    margin-bottom: var(--space-md);
+  }
+  .team-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto;
+    border: 3px solid var(--color-primary);
+  }
+  .team-avatar-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--color-bg-alt);
+    border: 2px dashed var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+  .team-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-xs);
+    color: var(--color-primary);
+  }
+  .team-role {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+  }
+  .team-bio {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    line-height: 1.6;
+  }
+  .timeline {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 45px;
+    width: 2px;
+    background: var(--color-border);
+  }
+  .timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-lg);
+    position: relative;
+  }
+  .timeline-badge {
+    flex-shrink: 0;
+    width: 90px;
+    height: 38px;
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    z-index: 1;
+  }
+  .timeline-content {
+    flex-grow: 1;
+    padding: var(--space-md) var(--space-lg);
+  }
+  .timeline-content h3 {
+    margin-bottom: var(--space-xs);
+    font-size: 1.15rem;
+    color: var(--color-primary);
+  }
+  .timeline-content p {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .cta-section {
+    background: var(--color-bg-alt);
+    padding: var(--space-2xl) 0;
+  }
+  .cta-section h2 {
+    color: var(--color-primary);
+    font-size: 2rem;
+  }
+</style>

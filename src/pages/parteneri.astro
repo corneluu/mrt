@@ -1,0 +1,112 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import PartnerGrid from '@/components/PartnerGrid.astro';
+import ContactForm from '@/components/ContactForm.astro';
+import { getCollection } from 'astro:content';
+
+const totiPartenerii = (await getCollection('parteneri'))
+  .sort((a, b) => a.data.ordine - b.data.ordine);
+
+const sponsori = totiPartenerii.filter(p => p.data.tip === 'sponsor').map(p => p.data);
+const parteneri = totiPartenerii.filter(p => p.data.tip === 'partener').map(p => p.data);
+const institutionali = totiPartenerii.filter(p => p.data.tip === 'institutional').map(p => p.data);
+
+const beneficii = [
+  { titlu: 'Responsabilitate Socială (CSR)', descriere: 'Proiecte cu impact măsurabil și aliniere directă la obiectivele de dezvoltare durabilă ale companiei dumneavoastră.' },
+  { titlu: 'Vizibilitate și Notorietate', descriere: 'Promovare pe canalele noastre media, comunicate de presă, rapoarte de activitate și materiale la evenimente.' },
+  { titlu: 'Implicarea Angajaților (Teambuilding)', descriere: 'Oportunități de voluntariat corporativ unde echipa dumneavoastră poate participa direct la acțiuni de caritate.' },
+  { titlu: 'Facilități Fiscale', descriere: 'Deducerea cheltuielilor de sponsorizare conform legislației Codului Fiscal din România.' },
+];
+---
+
+<BaseLayout title="Parteneri și sponsori" description="Partenerii și sponsorii care susțin misiunea Asociației Masa Rotundă Timișoara și modalități de colaborare CSR.">
+  <Hero
+    title="Parteneri și Sponsori"
+    subtitle="Construim punți de colaborare cu mediul de afaceri și instituțiile publice pentru o comunitate mai puternică"
+    showCTA={false}
+  />
+
+  <!-- Parteneri actuali -->
+  <section class="section">
+    <div class="container">
+      {sponsori.length > 0 && (
+        <div class="partner-group">
+          <SectionHeading title="Sponsori principali" subtitle="Companii care investesc constant în acțiunile noastre" />
+          <PartnerGrid parteneri={sponsori} />
+        </div>
+      )}
+
+      {parteneri.length > 0 && (
+        <div class="partner-group">
+          <SectionHeading title="Parteneri din comunitate" subtitle="Organizații partenere în derularea proiectelor locale" />
+          <PartnerGrid parteneri={parteneri} />
+        </div>
+      )}
+
+      {institutionali.length > 0 && (
+        <div class="partner-group">
+          <SectionHeading title="Parteneri instituționali" subtitle="Colaborări cu autoritățile publice și instituțiile de profil" />
+          <PartnerGrid parteneri={institutionali} />
+        </div>
+      )}
+
+      {totiPartenerii.length === 0 && (
+        <p class="text-center">Lista partenerilor este în curs de actualizare.</p>
+      )}
+    </div>
+  </section>
+
+  <!-- Pachet de sponsorizare -->
+  <section class="section bg-alt">
+    <div class="container">
+      <SectionHeading title="De ce să devii partener?" subtitle="Beneficiile colaborării strategice cu Masa Rotundă Timișoara" />
+      <div class="grid-2 benefits-grid">
+        {beneficii.map(b => (
+          <div class="card benefit-card">
+            <h3>{b.titlu}</h3>
+            <p>{b.descriere}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Formular parteneriat -->
+  <section class="section" id="formular-parteneriat">
+    <div class="container form-container">
+      <SectionHeading title="Hai să colaborăm!" subtitle="Scrie-ne o propunere sau solicită mai multe detalii despre proiectele noastre" />
+      <ContactForm formType="parteneriat" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .partner-group {
+    margin-bottom: var(--space-2xl);
+  }
+  .bg-alt {
+    background: var(--color-bg-alt);
+  }
+  .benefits-grid {
+    margin-top: var(--space-lg);
+  }
+  .benefit-card {
+    padding: var(--space-xl);
+  }
+  .benefit-card h3 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-sm);
+    font-size: 1.25rem;
+  }
+  .benefit-card p {
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin: 0;
+  }
+  .form-container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+</style>

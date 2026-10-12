@@ -1,0 +1,100 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+---
+
+<BaseLayout
+  title="Termeni și condiții"
+  description="Termenii și condițiile de utilizare a platformei web a Asociației Masa Rotundă Timișoara."
+  noindex={true}
+>
+  <div class="section">
+    <div class="container legal-container">
+      <SectionHeading title="Termeni și condiții" subtitle="Regulile generale privind accesul și utilizarea acestui website" />
+
+      <div class="legal-prose">
+        <p><strong>Ultima actualizare:</strong> 12 octombrie 2026</p>
+
+        <h2>1. Dispoziții generale</h2>
+        <p>
+          Accesul și utilizarea acestui website sunt guvernate de prezenții Termeni și Condiții. Prin navigarea pe acest site, vizitatorii confirmă că au citit, au înțeles și acceptă fără rezerve prevederile de mai jos. Website-ul este administrat de <strong>Asociația Masa Rotundă Timișoara</strong>, cu sediul în Timișoara, Str. Corbului nr. 1.
+        </p>
+
+        <h2>2. Scopul website-ului</h2>
+        <p>
+          Acest site este creat exclusiv în scop informativ și caritabil, pentru a prezenta publicului proiectele sociale, oportunitățile de voluntariat și campaniile asociației, precum și pentru a facilita donațiile și parteneriatele în sprijinul persoanelor aflate în dificultate.
+        </p>
+
+        <h2>3. Drepturi de proprietate intelectuală</h2>
+        <p>
+          Întregul conținut al acestui site (texte, imagini, grafică, logo-uri, elemente de design) este proprietatea Asociației Masa Rotundă Timișoara sau a partenerilor săi și este protejat de legislația națională și internațională privind drepturile de autor.
+        </p>
+        <p>
+          Este interzisă copierea, reproducerea, republicarea sau distribuirea conținutului în scopuri comerciale fără acordul prealabil scris al Asociației. Preluarea informațiilor în scopuri jurnalistice sau educative este permisă numai cu citarea clară a sursei.
+        </p>
+
+        <h2>4. Donații și plăți</h2>
+        <p>
+          Donațiile realizate către Asociația Masa Rotundă Timișoara au caracter nerambursabil, fiind direcționate către cauzele și proiectele asociației, cu excepția situațiilor reglementate expres de lege sau a erorilor evidente de transfer semnalate în termen legal. Fondurile colectate sunt gestionate în conformitate cu legislația română privind asociațiile și fundațiile (OG 26/2000).
+        </p>
+
+        <h2>5. Formulare și comunicare</h2>
+        <p>
+          Utilizatorii care trimit informații prin intermediul formularelor de contact, voluntariat sau parteneriat se obligă să furnizeze date reale și corecte. Asociația își rezervă dreptul de a refuza colaborarea în cazul transmiterii unor informații false sau a unor mesaje abuzive ori jignitoare.
+        </p>
+
+        <h2>6. Limitarea răspunderii</h2>
+        <p>
+          Deși depunem toate eforturile pentru ca informațiile publicate să fie corecte și actualizate, asociația nu garantează că site-ul va funcționa neîntrerupt sau fără erori tehnice. Nu ne asumăm răspunderea pentru posibile daune directe sau indirecte rezultate din utilizarea sau imposibilitatea utilizării site-ului.
+        </p>
+
+        <h2>7. Legături către alte site-uri</h2>
+        <p>
+          Site-ul poate include trimiteri (link-uri) către pagini terțe (de exemplu: platforme de social media, instituții partenere sau servicii de plăți). Nu exercităm control asupra politicilor sau conținutului acelor site-uri și nu ne asumăm răspunderea pentru acestea.
+        </p>
+
+        <h2>8. Modificarea termenilor</h2>
+        <p>
+          Asociația Masa Rotundă Timișoara își rezervă dreptul de a modifica oricând prezenta secțiune de Termeni și Condiții. Continuarea utilizării site-ului după efectuarea modificărilor reprezintă acordul tacit al utilizatorului cu noile prevederi.
+        </p>
+
+        <h2>9. Legislație aplicabilă și litigii</h2>
+        <p>
+          Prezenții termeni sunt supuși legilor din România. Orice dispută care nu poate fi soluționată pe cale amiabilă va fi înaintată instanțelor judecătorești competente din Timișoara.
+        </p>
+
+        <h2>10. Contact</h2>
+        <p>
+          Pentru orice neclarități legate de Termeni și Condiții, ne puteți scrie la adresa de e-mail: <a href="mailto:mrt@gmail.com">mrt@gmail.com</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .legal-prose {
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+  .legal-prose h2 {
+    color: var(--color-primary);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-sm);
+    font-size: 1.4rem;
+  }
+  .legal-prose p {
+    margin-bottom: var(--space-md);
+  }
+  .legal-prose ul {
+    padding-left: var(--space-lg);
+    margin-bottom: var(--space-md);
+  }
+  .legal-prose li {
+    margin-bottom: var(--space-xs);
+  }
+</style>

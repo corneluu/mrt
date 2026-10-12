@@ -1,0 +1,198 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import ContactForm from '@/components/ContactForm.astro';
+---
+
+<BaseLayout title="Contact" description="Ia legătura cu Asociația Masa Rotundă Timișoara. Suntem aici pentru întrebări, propuneri de colaborare sau parteneriate.">
+  <Hero
+    title="Contactează-ne"
+    subtitle="Ai o întrebare, dorești să propui o inițiativă sau vrei să afli mai multe? Suntem mereu bucuroși să discutăm."
+    showCTA={false}
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="contact-grid">
+        <!-- Detalii de contact -->
+        <div class="contact-info">
+          <h2>Informații de contact</h2>
+          <p class="intro-p">Ne poți contacta telefonic, prin email sau ne poți vizita la sediul nostru din Timișoara conform programului de lucru.</p>
+
+          <div class="info-cards">
+            <div class="card info-card">
+              <div class="info-icon">📍</div>
+              <div class="info-body">
+                <h3>Adresă</h3>
+                <p>Str. Corbului nr. 1, Timișoara, jud. Timiș, România</p>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Strada+Corbului+1+Timisoara"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="map-link"
+                >
+                  Deschide în Google Maps →
+                </a>
+              </div>
+            </div>
+
+            <div class="card info-card">
+              <div class="info-icon">📞</div>
+              <div class="info-body">
+                <h3>Telefon</h3>
+                <p><a href="tel:0771569557">0771 569 557</a></p>
+              </div>
+            </div>
+
+            <div class="card info-card">
+              <div class="info-icon">✉️</div>
+              <div class="info-body">
+                <h3>Email</h3>
+                <p><a href="mailto:mrt@gmail.com">mrt@gmail.com</a></p>
+              </div>
+            </div>
+
+            <div class="card info-card">
+              <div class="info-icon">⏰</div>
+              <div class="info-body">
+                <h3>Program de lucru</h3>
+                <p>Luni – Vineri: 09:00 – 17:00<br />Sâmbătă – Duminică: Închis (acțiuni pe teren)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Static Map Placeholder -->
+          <div class="map-placeholder">
+            <div class="map-overlay">
+              <span>Harta Sediului Asociației</span>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Strada+Corbului+1+Timisoara"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-sm btn-primary"
+              >
+                Vezi pe Google Maps
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formular contact -->
+        <div class="contact-form-wrapper">
+          <div class="card form-card">
+            <h2>Trimite-ne un mesaj</h2>
+            <p>Completează formularul și un reprezentant al asociației îți va răspunde cât mai curând.</p>
+            <ContactForm formType="contact" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+  @media (max-width: 850px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .contact-info h2 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-xs);
+  }
+  .intro-p {
+    color: var(--color-text-light);
+    margin-bottom: var(--space-lg);
+    line-height: 1.6;
+  }
+  .info-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+  .info-card {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    align-items: flex-start;
+  }
+  .info-icon {
+    font-size: 1.8rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .info-body h3 {
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+    color: var(--color-primary);
+  }
+  .info-body p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--color-text);
+  }
+  .info-body a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .info-body a:hover {
+    text-decoration: underline;
+  }
+  .map-link {
+    display: inline-block;
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
+  }
+  .map-placeholder {
+    height: 200px;
+    background: #e2e8f0;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+  .map-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    background: rgba(255, 255, 255, 0.9);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.1));
+  }
+  .map-overlay span {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--color-text);
+  }
+  .btn-sm {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  .form-card {
+    padding: var(--space-xl);
+  }
+  .form-card h2 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-xs);
+  }
+  .form-card p {
+    color: var(--color-text-light);
+    margin-bottom: var(--space-lg);
+  }
+</style>

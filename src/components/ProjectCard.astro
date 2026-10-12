@@ -1,0 +1,245 @@
+---
+interface Props {
+  titlu: string;
+  descriere: string;
+  imagine: string;
+  categorie: string;
+  status: 'activ' | 'finalizat' | 'planificat' | string;
+  slug: string;
+}
+
+const { titlu, descriere, imagine, categorie, status, slug } = Astro.props;
+
+const cleanSlug = slug.replace(/\.(md|mdx|json)$/, '');
+const projectUrl = `/proiecte/${cleanSlug}/`;
+
+const categorieMap: Record<string, string> = {
+  educatie: 'Educație',
+  sanatate: 'Sănătate',
+  comunitate: 'Comunitate',
+  social: 'Social',
+  tineret: 'Tineret',
+};
+
+const statusMap: Record<string, { label: string; textClass: string }> = {
+  activ: { label: 'Activ', textClass: 'status-activ' },
+  finalizat: { label: 'Finalizat', textClass: 'status-finalizat' },
+  planificat: { label: 'Planificat', textClass: 'status-planificat' },
+};
+
+const categoryLabel = categorieMap[categorie] ?? (categorie.charAt(0).toUpperCase() + categorie.slice(1));
+const statusInfo = statusMap[status] ?? { label: status, textClass: 'status-default' };
+---
+
+<article class="card project-card">
+  <div class="card-image-wrap">
+    <a href={projectUrl} tabindex="-1" aria-hidden="true">
+      <img
+        src={imagine}
+        alt={titlu}
+        loading="lazy"
+        decoding="async"
+        class="card-img"
+      />
+    </a>
+  </div>
+
+  <div class="card-body">
+    <div class="card-meta">
+      <span class:list={['badge', `badge-${categorie}`]}>{categoryLabel}</span>
+      <span class:list={['status-indicator', statusInfo.textClass]}>
+        <span class="status-dot" aria-hidden="true"></span>
+        <span class="status-label">{statusInfo.label}</span>
+      </span>
+    </div>
+
+    <h3 class="card-title">
+      <a href={projectUrl}>{titlu}</a>
+    </h3>
+
+    <p class="card-desc">{descriere}</p>
+
+    <div class="card-footer-action">
+      <a href={projectUrl} class="read-more-link" aria-label={`Citește mai mult despre ${titlu}`}>
+        Citește mai mult <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+  }
+
+  .card-image-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--color-bg-alt);
+  }
+
+  .card-img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+    display: block;
+  }
+
+  .project-card:hover .card-img {
+    transform: scale(1.05);
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: var(--space-lg);
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  /* Status Indicators */
+  .status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    display: inline-block;
+  }
+
+  .status-activ {
+    color: #22543D;
+  }
+  .status-activ .status-dot {
+    background-color: var(--color-success, #48BB78);
+    box-shadow: 0 0 0 2px rgba(72, 187, 120, 0.25);
+  }
+
+  .status-finalizat {
+    color: #4A5568;
+  }
+  .status-finalizat .status-dot {
+    background-color: #718096;
+    box-shadow: 0 0 0 2px rgba(113, 128, 150, 0.25);
+  }
+
+  .status-planificat {
+    color: #2B6CB0;
+  }
+  .status-planificat .status-dot {
+    background-color: #3182CE;
+    box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.25);
+  }
+
+  .status-default {
+    color: var(--color-text-muted);
+  }
+  .status-default .status-dot {
+    background-color: var(--color-text-muted);
+  }
+
+  /* Category Badges */
+  .badge-educatie {
+    background-color: #FEFCBF;
+    color: #975A16;
+  }
+
+  .badge-sanatate {
+    background-color: #C6F6D5;
+    color: #22543D;
+  }
+
+  .badge-social {
+    background-color: #EBF8FF;
+    color: #2B6CB0;
+  }
+
+  .badge-comunitate {
+    background-color: #E9D8FD;
+    color: #553C9A;
+  }
+
+  .badge-tineret {
+    background-color: #FEEBC8;
+    color: #C05621;
+  }
+
+  .card-title {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-tight);
+    margin-top: 0;
+    margin-bottom: var(--space-xs);
+  }
+
+  .card-title a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+
+  .card-title a:hover {
+    color: var(--color-secondary);
+  }
+
+  .card-desc {
+    color: var(--color-text-light);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    margin-bottom: var(--space-md);
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer-action {
+    margin-top: auto;
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .read-more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    transition: color var(--transition-fast), gap var(--transition-fast);
+  }
+
+  .read-more-link .arrow {
+    transition: transform var(--transition-fast);
+  }
+
+  .read-more-link:hover {
+    color: var(--color-secondary-dark);
+  }
+
+  .read-more-link:hover .arrow {
+    transform: translateX(4px);
+  }
+</style>

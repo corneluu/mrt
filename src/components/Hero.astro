@@ -1,0 +1,205 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  showCTA?: boolean;
+  backgroundImage?: string;
+  minHeight?: string;
+}
+
+const {
+  title,
+  subtitle,
+  showCTA = true,
+  backgroundImage,
+  minHeight = showCTA ? '70vh' : '50vh',
+} = Astro.props;
+
+const heroStyle = backgroundImage
+  ? `min-height: ${minHeight}; background-image: linear-gradient(135deg, rgba(15, 39, 64, 0.92) 0%, rgba(27, 58, 92, 0.85) 100%), url('${backgroundImage}');`
+  : `min-height: ${minHeight};`;
+---
+
+<section class="hero-section" style={heroStyle} aria-labelledby="hero-title">
+  <div class="container hero-container">
+    <div class="hero-logo-wrapper">
+      <div class="hero-logo-badge">
+        <img
+          src="/images/logo-mrt.png"
+          alt="Logo Masa Rotundă Timișoara"
+          class="hero-logo"
+          width="120"
+          height="120"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+      <span class="hero-logo-caption">TIMIȘOARA</span>
+    </div>
+
+    <h1 id="hero-title" class="hero-title">{title}</h1>
+
+    {subtitle && (
+      <p class="hero-subtitle">{subtitle}</p>
+    )}
+
+    {showCTA && (
+      <div class="hero-cta">
+        <a href="/donatii/" class="btn btn-primary btn-lg">Donează</a>
+        <a href="/voluntariat/" class="btn btn-secondary btn-lg">Fii voluntar</a>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-block: var(--space-3xl);
+    background-color: var(--color-primary-dark);
+    background-image: linear-gradient(135deg, rgba(15, 39, 64, 0.94) 0%, rgba(27, 58, 92, 0.9) 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: var(--color-white);
+    text-align: center;
+  }
+
+  .hero-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 900px;
+    margin-inline: auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-logo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero-logo-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 0 4px rgba(212, 168, 67, 0.4);
+    padding: 6px;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  }
+
+  .hero-logo-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 0 0 5px rgba(212, 168, 67, 0.7);
+  }
+
+  .hero-logo {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    border-radius: 50%;
+    display: block;
+  }
+
+  .hero-logo-caption {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    color: var(--color-accent-light);
+    text-transform: uppercase;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  .hero-title {
+    color: var(--color-white);
+    font-size: clamp(2.25rem, 5vw + 0.5rem, 3.75rem);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+    margin-bottom: var(--space-md);
+    text-wrap: balance;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .hero-subtitle {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: clamp(1.05rem, 1.8vw + 0.5rem, 1.35rem);
+    line-height: var(--line-height-relaxed);
+    max-width: 720px;
+    margin-inline: auto;
+    margin-bottom: var(--space-xl);
+    text-wrap: pretty;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-top: var(--space-xs);
+  }
+
+  /* Scoped styling to ensure contrast on dark hero backdrop */
+  .hero-cta .btn {
+    min-width: 170px;
+  }
+
+  .hero-cta .btn-secondary {
+    background-color: transparent;
+    color: var(--color-white);
+    border-color: rgba(255, 255, 255, 0.85);
+  }
+
+  .hero-cta .btn-secondary:hover {
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    border-color: var(--color-white);
+  }
+
+  @media (max-width: 640px) {
+    .hero-section {
+      padding-block: var(--space-2xl);
+    }
+    .hero-logo-badge {
+      width: 96px;
+      height: 96px;
+      padding: 5px;
+    }
+    .hero-logo-caption {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+    }
+    .hero-cta {
+      flex-direction: column;
+      width: 100%;
+      max-width: 320px;
+    }
+    .hero-cta .btn {
+      width: 100%;
+      min-width: unset;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hero-logo-badge {
+      width: 130px;
+      height: 130px;
+      padding: 8px;
+    }
+  }
+</style>

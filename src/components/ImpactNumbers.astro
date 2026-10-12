@@ -1,0 +1,73 @@
+---
+const stats = [
+  { number: '3.200+', label: 'Mese servite' },
+  { number: '450+', label: 'Familii ajutate' },
+  { number: '120+', label: 'Voluntari activi' },
+  { number: '15+', label: 'Proiecte derulate' },
+];
+---
+
+<section class="impact-section">
+  <div class="container">
+    <div class="impact-grid">
+      {stats.map(stat => (
+        <div class="impact-item">
+          <span class="impact-number">{stat.number}</span>
+          <span class="impact-label">{stat.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .impact-section {
+    background: var(--color-primary);
+    padding: var(--space-2xl) 0;
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+    text-align: center;
+  }
+
+  .impact-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .impact-number {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--color-accent-light);
+    line-height: 1.1;
+  }
+
+  .impact-label {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+  }
+
+  @media (max-width: 480px) {
+    .impact-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+    }
+    .impact-number {
+      font-size: 1.75rem;
+    }
+    .impact-label {
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .impact-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

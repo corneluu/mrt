@@ -1,0 +1,112 @@
+---
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import CookieBanner from '@/components/CookieBanner.astro';
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  canonical?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = 'Masa Rotundă Timișoara – organizație non-profit dedicată acțiunilor de caritate și sprijin comunitar în Timișoara și județul Timiș.',
+  ogImage = '/images/logo-mrt.png',
+  canonical,
+  noindex = false,
+} = Astro.props;
+
+const siteUrl = 'https://mrt.ro';
+const pageUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
+const fullOgImage = ogImage.startsWith('http') ? ogImage : new URL(ogImage, siteUrl).href;
+const fullTitle = title === 'Acasă' ? 'Masa Rotundă Timișoara – Caritate și Comunitate' : `${title} | Masa Rotundă Timișoara`;
+---
+
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- SEO -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={pageUrl} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={fullOgImage} />
+    <meta property="og:locale" content="ro_RO" />
+    <meta property="og:site_name" content="Masa Rotundă Timișoara" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={fullOgImage} />
+
+    <!-- Favicon Set (Complete multi-resolution) -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/images/logo-mrt.png" />
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "NGO",
+      "name": "Masa Rotundă Timișoara",
+      "alternateName": "MRT",
+      "url": siteUrl,
+      "logo": `${siteUrl}/images/logo-mrt.png`,
+      "description": description,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Str. Corbului nr. 1",
+        "addressLocality": "Timișoara",
+        "addressRegion": "Timiș",
+        "addressCountry": "RO"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "mrt@gmail.com",
+        "telephone": "+40771569557",
+        "contactType": "customer service",
+        "availableLanguage": "Romanian"
+      },
+      "sameAs": [
+        "https://www.facebook.com",
+        "https://www.instagram.com",
+        "https://www.tiktok.com",
+        "https://www.youtube.com",
+        "https://www.linkedin.com"
+      ]
+    })} />
+
+    <!-- Cloudflare Web Analytics (Cookieless, GDPR safe, lightweight) -->
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "CLOUDFLARE_ANALYTICS_TOKEN"}'></script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Sari la conținut</a>
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+    <CookieBanner />
+  </body>
+</html>

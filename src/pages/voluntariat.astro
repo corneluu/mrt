@@ -1,0 +1,190 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import ContactForm from '@/components/ContactForm.astro';
+
+const motive = [
+  { titlu: 'Impact direct în comunitate', descriere: 'Fiecare oră investită se traduce în zâmbete, mese asigurate și sprijin concret pentru copiii și bătrânii din Timișoara.', icon: '🤝' },
+  { titlu: 'Dezvoltare personală și abilități noi', descriere: 'Înveți să lucrezi în echipă, îți dezvolți empatia, abilitățile de organizare și leadership într-un mediu pozitiv.', icon: '🌱' },
+  { titlu: 'O comunitate unită de prieteni', descriere: 'Intri într-o rețea de oameni motivați și altruiști care împărtășesc aceleași valori morale și sociale.', icon: '❤️' },
+  { titlu: 'Recunoaștere și adeverințe', descriere: 'Oferim contract de voluntariat și adeverințe oficiale de practică conform legislației în vigoare.', icon: '📜' },
+];
+
+const roluri = [
+  {
+    titlu: 'Voluntar la masa caldă',
+    departament: 'Asistență Socială',
+    descriere: 'Ajută la pregătirea, porționarea și distribuirea pachetelor alimentare către persoanele fără adăpost și familiile vulnerabile.',
+  },
+  {
+    titlu: 'Mediator educațional',
+    departament: 'Educație & Tineret',
+    descriere: 'Oferă sprijin la teme și activități recreative pentru copiii din centrele comunitare și din mediul rural.',
+  },
+  {
+    titlu: 'Voluntar logistică',
+    departament: 'Operațiuni & Logistică',
+    descriere: 'Participă la recepționarea, sortarea și transportul donațiilor de haine, alimente și materiale de igienă.',
+  },
+  {
+    titlu: 'Voluntar comunicare',
+    departament: 'Media & Marketing',
+    descriere: 'Ne ajuți să transmitem mesajul mai departe prin foto/video la evenimente, redactare de articole și social media.',
+  },
+];
+
+const pasi = [
+  { numar: '1', titlu: 'Completează formularul', descriere: 'Scrie-ne câteva rânduri despre tine și disponibilitatea ta în formularul de mai jos.' },
+  { numar: '2', titlu: 'Participă la o întâlnire', descriere: 'Te invităm la o scurtă discuție online sau la sediu pentru a ne cunoaște și a-ți prezenta activitățile.' },
+  { numar: '3', titlu: 'Alege proiectul', descriere: 'Împreună stabilim proiectul și rolul care ți se potrivește cel mai bine în funcție de program.' },
+  { numar: '4', titlu: 'Începe acțiunea!', descriere: 'Semnăm contractul de voluntariat și te alături echipei noastre pe teren.' },
+];
+---
+
+<BaseLayout title="Voluntariat" description="Alătură-te echipei de voluntari a Asociației Masa Rotundă Timișoara și contribuie la schimbarea comunității.">
+  <Hero
+    title="Fii Voluntar"
+    subtitle="Alătură-te echipei noastre și fă diferența în comunitate. Timpul și grija ta pot transforma vieți."
+    showCTA={false}
+  />
+
+  <!-- De ce să fii voluntar? -->
+  <section class="section">
+    <div class="container">
+      <SectionHeading title="De ce să fii voluntar?" subtitle="Motivele pentru care timpul tău contează enorm" />
+      <div class="grid-4">
+        {motive.map(motiv => (
+          <div class="card reason-card">
+            <span class="reason-icon">{motiv.icon}</span>
+            <h3>{motiv.titlu}</h3>
+            <p>{motiv.descriere}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Roluri deschise -->
+  <section class="section bg-alt">
+    <div class="container">
+      <SectionHeading title="Roluri deschise" subtitle="Alege domeniul în care vrei să te implici activ" />
+      <div class="grid-2">
+        {roluri.map(rol => (
+          <div class="card role-card">
+            <div class="role-badge">{rol.departament}</div>
+            <h3>{rol.titlu}</h3>
+            <p>{rol.descriere}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pașii pentru a deveni voluntar -->
+  <section class="section">
+    <div class="container">
+      <SectionHeading title="Pașii pentru a deveni voluntar" subtitle="Un proces simplu și deschis pentru toți doritorii" />
+      <div class="grid-4 steps-grid">
+        {pasi.map(pas => (
+          <div class="card step-card text-center">
+            <div class="step-circle">{pas.numar}</div>
+            <h3>{pas.titlu}</h3>
+            <p>{pas.descriere}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Formular înscriere -->
+  <section class="section bg-alt" id="formular-inscriere">
+    <div class="container form-container">
+      <SectionHeading title="Formular de înscriere" subtitle="Completează datele și te vom contacta în cel mai scurt timp" />
+      <ContactForm showVolunteerFields={true} formType="voluntariat" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .bg-alt {
+    background: var(--color-bg-alt);
+  }
+  .reason-card {
+    padding: var(--space-lg);
+  }
+  .reason-icon {
+    font-size: 2.2rem;
+    display: inline-block;
+    margin-bottom: var(--space-sm);
+  }
+  .reason-card h3 {
+    font-size: 1.15rem;
+    margin-bottom: var(--space-xs);
+    color: var(--color-primary);
+  }
+  .reason-card p {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .role-card {
+    padding: var(--space-lg);
+  }
+  .role-badge {
+    display: inline-block;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: var(--space-sm);
+  }
+  .role-card h3 {
+    margin-bottom: var(--space-xs);
+    font-size: 1.3rem;
+    color: var(--color-primary);
+  }
+  .role-card p {
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .steps-grid {
+    margin-top: var(--space-lg);
+  }
+  .step-card {
+    padding: var(--space-lg) var(--space-md);
+  }
+  .step-circle {
+    width: 50px;
+    height: 50px;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-md);
+  }
+  .step-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: var(--space-xs);
+    color: var(--color-primary);
+  }
+  .step-card p {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .form-container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+</style>

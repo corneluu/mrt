@@ -1,0 +1,117 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const proiecte = await getCollection('proiecte');
+  return proiecte.map(proiect => ({
+    params: { slug: proiect.id.replace(/\.(md|mdx)$/, '') },
+    props: { proiect },
+  }));
+}
+
+const { proiect } = Astro.props;
+const { Content } = await render(proiect);
+
+const statusLabels: Record<string, string> = {
+  activ: 'Proiect activ',
+  finalizat: 'Proiect finalizat',
+  planificat: 'În planificare',
+};
+
+const categorieLabels: Record<string, string> = {
+  educatie: 'Educație',
+  sanatate: 'Sănătate',
+  comunitate: 'Comunitate',
+  social: 'Social',
+  tineret: 'Tineret',
+};
+---
+
+<BaseLayout title={proiect.data.titlu} description={proiect.data.descriere}>
+  <article class="section">
+    <div class="container project-detail">
+      <nav class="breadcrumb" aria-label="Navigare ierarhică">
+        <a href="/">Acasă</a> ›
+        <a href="/proiecte/">Proiecte</a> ›
+        <span aria-current="page">{proiect.data.titlu}</span>
+      </nav>
+
+      <header class="project-header">
+        <div class="project-meta">
+          <span class={`badge badge-${proiect.data.categorie}`}>{categorieLabels[proiect.data.categorie]}</span>
+          <span class={`status status-${proiect.data.status}`}>{statusLabels[proiect.data.status]}</span>
+        </div>
+        <h1>{proiect.data.titlu}</h1>
+        <p class="project-desc">{proiect.data.descriere}</p>
+      </header>
+
+      <img src={proiect.data.imagine} alt={proiect.data.titlu} class="project-image" width="1200" height="600" loading="eager" />
+
+      <div class="project-info-grid">
+        {proiect.data.locatie && (
+          <div class="info-item">
+            <strong>Locație</strong>
+            <span>{proiect.data.locatie}</span>
+          </div>
+        )}
+        <div class="info-item">
+          <strong>Data începerii</strong>
+          <span>{new Intl.DateTimeFormat('ro-RO', { year: 'numeric', month: 'long' }).format(proiect.data.dataStart)}</span>
+        </div>
+        {proiect.data.beneficiari && (
+          <div class="info-item">
+            <strong>Beneficiari</strong>
+            <span>{proiect.data.beneficiari.toLocaleString('ro-RO')}+</span>
+          </div>
+        )}
+        {proiect.data.parteneri && proiect.data.parteneri.length > 0 && (
+          <div class="info-item">
+            <strong>Parteneri</strong>
+            <span>{proiect.data.parteneri.join(', ')}</span>
+          </div>
+        )}
+      </div>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <div class="project-cta">
+        <a href="/donatii/" class="btn btn-primary">Susține acest proiect</a>
+        <a href="/voluntariat/" class="btn btn-secondary">Fii voluntar</a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .project-detail { max-width: 800px; margin: 0 auto; }
+  .breadcrumb { font-size: 0.9rem; margin-bottom: var(--space-lg); color: var(--color-text-light); }
+  .breadcrumb a { color: var(--color-primary); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .project-header { margin-bottom: var(--space-lg); }
+  .project-meta { display: flex; gap: var(--space-sm); margin-bottom: var(--space-md); }
+  .project-header h1 { font-size: 2.2rem; color: var(--color-primary); margin-bottom: var(--space-sm); }
+  .project-desc { font-size: 1.1rem; color: var(--color-text-light); line-height: 1.7; }
+  .project-image { width: 100%; height: auto; border-radius: var(--radius-md); margin-bottom: var(--space-xl); aspect-ratio: 2/1; object-fit: cover; background: var(--color-bg-alt); }
+  .project-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-md); padding: var(--space-lg); background: var(--color-bg-alt); border-radius: var(--radius-md); margin-bottom: var(--space-xl); }
+  .info-item { display: flex; flex-direction: column; gap: var(--space-xs); }
+  .info-item strong { font-size: 0.85rem; color: var(--color-text-light); text-transform: uppercase; letter-spacing: 0.05em; }
+  .info-item span { font-size: 1rem; font-weight: 600; color: var(--color-text); }
+  .prose { line-height: 1.8; margin-bottom: var(--space-xl); }
+  .prose h2 { color: var(--color-primary); margin-top: var(--space-xl); margin-bottom: var(--space-md); }
+  .prose ul { padding-left: var(--space-lg); }
+  .prose li { margin-bottom: var(--space-xs); }
+  .project-cta { display: flex; gap: var(--space-md); flex-wrap: wrap; padding-top: var(--space-xl); border-top: 1px solid var(--color-border); }
+  .badge { display: inline-block; padding: 0.25em 0.75em; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600; }
+  .badge-educatie { background: #EBF5FB; color: #2471A3; }
+  .badge-sanatate { background: #EAFAF1; color: #1E8449; }
+  .badge-comunitate { background: #FEF9E7; color: #B7950B; }
+  .badge-social { background: #F5EEF8; color: #7D3C98; }
+  .badge-tineret { background: #FDEBD0; color: #CA6F1E; }
+  .status { font-size: 0.8rem; font-weight: 500; }
+  .status-activ { color: var(--color-success); }
+  .status-finalizat { color: var(--color-text-light); }
+  .status-planificat { color: #3498DB; }
+</style>

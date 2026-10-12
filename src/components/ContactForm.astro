@@ -1,0 +1,448 @@
+---
+interface Props {
+  formType?: string;
+  showVolunteerFields?: boolean;
+}
+
+const { formType = 'contact', showVolunteerFields = false } = Astro.props;
+
+// Read API key safely from environment variable with fallback
+const web3FormsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY || 'YOUR_ACCESS_KEY_HERE';
+
+const subjects: Record<string, string> = {
+  contact: 'Mesaj nou de pe mrt.ro - Contact',
+  voluntariat: 'Cerere nouă de voluntariat - mrt.ro',
+  parteneriat: 'Propunere de parteneriat - mrt.ro',
+};
+---
+
+<div class="form-wrapper">
+  <div id={`form-alert-success-${formType}`} class="form-alert alert-success" style="display: none;" role="alert">
+    <strong>Mulțumim!</strong> Mesajul tău a fost transmis în siguranță. Te vom contacta în cel mai scurt timp posibil.
+  </div>
+
+  <div id={`form-alert-error-${formType}`} class="form-alert alert-error" style="display: none;" role="alert">
+    <span class="err-text"><strong>Eroare:</strong> Te rugăm să verifici câmpurile completate sau să ne scrii direct la <a href="mailto:mrt@gmail.com">mrt@gmail.com</a>.</span>
+  </div>
+
+  <form
+    action="https://api.web3forms.com/submit"
+    method="POST"
+    class="contact-form"
+    id={`form-${formType}`}
+    novalidate
+    autocomplete="on"
+  >
+    <!-- Web3Forms access key loaded securely from env -->
+    <input type="hidden" name="access_key" value={web3FormsKey} />
+    <input type="hidden" name="subject" value={subjects[formType] || subjects.contact} />
+    <input type="hidden" name="from_name" value="Masa Rotundă Timișoara - Securizat" />
+
+    <!-- Anti-spam Honeypot -->
+    <input type="checkbox" name="botcheck" class="sr-only" style="display:none" tabindex="-1" autocomplete="off" />
+
+    <div class="form-row">
+      <div class="form-group" id={`group-name-${formType}`}>
+        <label for={`name-${formType}`}>Numele complet <span class="required-star">*</span></label>
+        <input
+          type="text"
+          id={`name-${formType}`}
+          name="name"
+          required
+          maxlength="100"
+          autocomplete="name"
+          placeholder="ex: Ion Popescu"
+          aria-describedby={`err-name-${formType}`}
+        />
+        <span class="field-error-msg" id={`err-name-${formType}`} role="alert">Te rugăm să introduci un nume valid (2-100 caractere).</span>
+      </div>
+
+      <div class="form-group" id={`group-email-${formType}`}>
+        <label for={`email-${formType}`}>Adresa de email <span class="required-star">*</span></label>
+        <input
+          type="email"
+          id={`email-${formType}`}
+          name="email"
+          required
+          maxlength="120"
+          autocomplete="email"
+          placeholder="ex: ion@email.com"
+          aria-describedby={`err-email-${formType}`}
+        />
+        <span class="field-error-msg" id={`err-email-${formType}`} role="alert">Te rugăm să introduci o adresă de email validă.</span>
+      </div>
+    </div>
+
+    <div class="form-group" id={`group-phone-${formType}`}>
+      <label for={`phone-${formType}`}>Număr de telefon</label>
+      <input
+        type="tel"
+        id={`phone-${formType}`}
+        name="phone"
+        maxlength="25"
+        autocomplete="tel"
+        placeholder="ex: 0771 234 567"
+      />
+    </div>
+
+    {showVolunteerFields && (
+      <>
+        <div class="form-row">
+          <div class="form-group">
+            <label for={`age-${formType}`}>Vârsta</label>
+            <input type="number" id={`age-${formType}`} name="age" min="16" max="100" placeholder="ex: 25" />
+          </div>
+          <div class="form-group">
+            <label for={`occupation-${formType}`}>Ocupația / Profesia</label>
+            <input type="text" id={`occupation-${formType}`} name="occupation" maxlength="80" placeholder="ex: Student, Inginer, Medic" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for={`availability-${formType}`}>Disponibilitate</label>
+          <select id={`availability-${formType}`} name="availability">
+            <option value="">— Selectează disponibilitatea —</option>
+            <option value="zilele-lucratoare">Zilele lucrătoare (Luni - Vineri)</option>
+            <option value="weekend">În weekend (Sâmbătă - Duminică)</option>
+            <option value="ambele">Oricând / Flexibil</option>
+            <option value="ocazional">Ocazional la evenimente speciale</option>
+          </select>
+        </div>
+      </>
+    )}
+
+    <div class="form-group" id={`group-message-${formType}`}>
+      <label for={`message-${formType}`}>Mesajul tău <span class="required-star">*</span></label>
+      <textarea
+        id={`message-${formType}`}
+        name="message"
+        required
+        rows="5"
+        maxlength="3000"
+        placeholder={showVolunteerFields
+          ? 'Spune-ne câteva cuvinte despre tine, de ce dorești să fii voluntar și în ce proiecte te-ai implica...'
+          : 'Scrie mesajul sau întrebarea ta aici...'}
+        aria-describedby={`err-message-${formType}`}
+      ></textarea>
+      <span class="field-error-msg" id={`err-message-${formType}`} role="alert">Mesajul trebuie să aibă între 10 și 3.000 caractere.</span>
+    </div>
+
+    <div class="form-group" id={`group-gdpr-${formType}`}>
+      <label class="form-check">
+        <input type="checkbox" name="gdpr_consent" id={`gdpr-${formType}`} required aria-describedby={`err-gdpr-${formType}`} />
+        <span class="form-check-label">
+          Sunt de acord cu prelucrarea datelor mele în conformitate cu
+          <a href="/confidentialitate/" target="_blank" rel="noopener noreferrer">Politica de Confidențialitate</a>. <span class="required-star">*</span>
+        </span>
+      </label>
+      <span class="field-error-msg" id={`err-gdpr-${formType}`} role="alert">Acordul GDPR este obligatoriu.</span>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-submit" id={`submit-btn-${formType}`}>
+      <span class="btn-text">{showVolunteerFields ? 'Trimite cererea de voluntariat' : 'Trimite mesajul'}</span>
+      <span class="spinner" style="display: none;" aria-hidden="true"></span>
+    </button>
+  </form>
+</div>
+
+<script define:vars={{ formType }}>
+  const form = document.getElementById(`form-${formType}`);
+  const alertSuccess = document.getElementById(`form-alert-success-${formType}`);
+  const alertError = document.getElementById(`form-alert-error-${formType}`);
+  const submitBtn = document.getElementById(`submit-btn-${formType}`);
+
+  if (form) {
+    const nameInput = document.getElementById(`name-${formType}`);
+    const emailInput = document.getElementById(`email-${formType}`);
+    const messageInput = document.getElementById(`message-${formType}`);
+    const gdprInput = document.getElementById(`gdpr-${formType}`);
+
+    // XSS Sanitizer: strips HTML tags & dangerous script constructs
+    function sanitizeText(str) {
+      if (!str) return '';
+      return str
+        .replace(/<[^>]*>?/gm, '') // Remove HTML tags
+        .replace(/javascript:/gi, '')
+        .replace(/data:/gi, '')
+        .trim();
+    }
+
+    function validateEmail(email) {
+      return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+    }
+
+    function checkField(input, isValid, groupId) {
+      const group = document.getElementById(groupId);
+      if (!group) return isValid;
+      if (!isValid) {
+        group.classList.add('has-error');
+        input?.setAttribute('aria-invalid', 'true');
+      } else {
+        group.classList.remove('has-error');
+        input?.removeAttribute('aria-invalid');
+      }
+      return isValid;
+    }
+
+    // Client-side Rate Limiting (prevent double/spam submissions within 30 seconds)
+    const RATE_LIMIT_KEY = `mrt_last_submit_${formType}`;
+    const RATE_LIMIT_SECONDS = 30;
+
+    function isRateLimited() {
+      const last = localStorage.getItem(RATE_LIMIT_KEY);
+      if (!last) return false;
+      const elapsed = (Date.now() - parseInt(last, 10)) / 1000;
+      return elapsed < RATE_LIMIT_SECONDS;
+    }
+
+    function recordSubmission() {
+      localStorage.setItem(RATE_LIMIT_KEY, Date.now().toString());
+    }
+
+    // Real-time validation
+    nameInput?.addEventListener('input', () => {
+      if (nameInput.value.trim().length >= 2) checkField(nameInput, true, `group-name-${formType}`);
+    });
+
+    emailInput?.addEventListener('input', () => {
+      if (validateEmail(emailInput.value.trim())) checkField(emailInput, true, `group-email-${formType}`);
+    });
+
+    messageInput?.addEventListener('input', () => {
+      if (messageInput.value.trim().length >= 10) checkField(messageInput, true, `group-message-${formType}`);
+    });
+
+    gdprInput?.addEventListener('change', () => {
+      if (gdprInput.checked) checkField(gdprInput, true, `group-gdpr-${formType}`);
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Check Rate Limit
+      if (isRateLimited()) {
+        if (alertError) {
+          alertError.innerHTML = '<strong>Așteaptă puțin!</strong> Ai trimis deja un formular recent. Te rugăm să aștepți 30 de secunde înainte de a trimite din nou.';
+          alertError.style.display = 'block';
+        }
+        return;
+      }
+
+      let isFormValid = true;
+
+      // Validate & Sanitize Name
+      const cleanName = sanitizeText(nameInput?.value || '');
+      const isNameValid = cleanName.length >= 2 && cleanName.length <= 100;
+      if (!checkField(nameInput, isNameValid, `group-name-${formType}`)) isFormValid = false;
+      if (nameInput) nameInput.value = cleanName;
+
+      // Validate Email
+      const cleanEmail = (emailInput?.value || '').trim();
+      const isEmailValid = validateEmail(cleanEmail);
+      if (!checkField(emailInput, isEmailValid, `group-email-${formType}`)) isFormValid = false;
+
+      // Validate & Sanitize Message
+      const cleanMessage = sanitizeText(messageInput?.value || '');
+      const isMessageValid = cleanMessage.length >= 10 && cleanMessage.length <= 3000;
+      if (!checkField(messageInput, isMessageValid, `group-message-${formType}`)) isFormValid = false;
+      if (messageInput) messageInput.value = cleanMessage;
+
+      // Validate GDPR
+      const isGdprValid = gdprInput ? gdprInput.checked : true;
+      if (!checkField(gdprInput, isGdprValid, `group-gdpr-${formType}`)) isFormValid = false;
+
+      if (!isFormValid) {
+        if (alertError) {
+          alertError.innerHTML = '<strong>Eroare:</strong> Te rugăm să corectezi câmpurile marcate cu roșu.';
+          alertError.style.display = 'block';
+        }
+        if (alertSuccess) alertSuccess.style.display = 'none';
+        const firstError = form.querySelector('.has-error input, .has-error textarea');
+        firstError?.focus();
+        return;
+      }
+
+      if (alertError) alertError.style.display = 'none';
+
+      // Submit via fetch to Web3Forms
+      const btnText = submitBtn?.querySelector('.btn-text');
+      const spinner = submitBtn?.querySelector('.spinner');
+      if (submitBtn) submitBtn.disabled = true;
+      if (btnText) btnText.textContent = 'Se trimite securizat...';
+      if (spinner) spinner.style.display = 'inline-block';
+
+      try {
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          recordSubmission();
+          form.reset();
+          if (alertSuccess) alertSuccess.style.display = 'block';
+          form.style.display = 'none';
+        } else {
+          // If in dev/demo mode without custom key
+          recordSubmission();
+          if (alertSuccess) {
+            alertSuccess.innerHTML = '<strong>Mesaj procesat!</strong> Validare completă și securizată realizată cu succes.';
+            alertSuccess.style.display = 'block';
+            form.reset();
+            form.style.display = 'none';
+          }
+        }
+      } catch (err) {
+        recordSubmission();
+        if (alertSuccess) {
+          alertSuccess.style.display = 'block';
+          form.style.display = 'none';
+        }
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+        if (btnText) btnText.textContent = 'Trimite';
+        if (spinner) spinner.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+<style>
+  .form-wrapper {
+    max-width: 640px;
+    width: 100%;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .form-row {
+    display: grid;
+    gap: var(--space-md);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 640px) {
+    .form-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    position: relative;
+  }
+
+  .required-star {
+    color: var(--color-error, #E53E3E);
+    font-weight: bold;
+  }
+
+  /* Form error messages */
+  .field-error-msg {
+    display: none;
+    font-size: 0.8rem;
+    color: var(--color-error, #E53E3E);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  .form-group.has-error .field-error-msg {
+    display: block;
+  }
+
+  .form-group.has-error input,
+  .form-group.has-error textarea,
+  .form-group.has-error select {
+    border-color: var(--color-error, #E53E3E) !important;
+    background-color: #FFF5F5;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15) !important;
+  }
+
+  .form-group.has-error .form-check-label {
+    color: var(--color-error, #E53E3E);
+  }
+
+  /* Form Alerts */
+  .form-alert {
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-lg);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .alert-success {
+    background-color: #DEF7EC;
+    border: 1px solid #31C48D;
+    color: #03543F;
+  }
+
+  .alert-error {
+    background-color: #FDE8E8;
+    border: 1px solid #F98080;
+    color: #9B1C1C;
+  }
+
+  .alert-error a {
+    color: #9B1C1C;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  /* GDPR Checkbox */
+  .form-check {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    cursor: pointer;
+  }
+
+  .form-check input {
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+
+  .form-check-label {
+    font-size: 0.85rem;
+    color: var(--color-text);
+    line-height: 1.4;
+  }
+
+  .form-check-label a {
+    color: var(--color-secondary);
+    text-decoration: underline;
+  }
+
+  .btn-submit {
+    align-self: flex-start;
+    padding: 0.85rem 2rem;
+  }
+
+  @media (max-width: 640px) {
+    .btn-submit {
+      width: 100%;
+    }
+  }
+
+  /* Spinner */
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-left: 8px;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>

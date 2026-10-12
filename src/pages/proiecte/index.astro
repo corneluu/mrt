@@ -1,0 +1,122 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const toateProiectele = (await getCollection('proiecte'))
+  .sort((a, b) => b.data.dataStart.getTime() - a.data.dataStart.getTime());
+
+const categorii = [
+  { id: 'toate', nume: 'Toate proiectele' },
+  { id: 'social', nume: 'Social' },
+  { id: 'educatie', nume: 'Educație' },
+  { id: 'sanatate', nume: 'Sănătate' },
+  { id: 'comunitate', nume: 'Comunitate' },
+  { id: 'tineret', nume: 'Tineret' },
+];
+---
+
+<BaseLayout title="Proiecte" description="Descoperă proiectele și inițiativele asociației Masa Rotundă Timișoara în educație, sănătate și asistență socială.">
+  <Hero
+    title="Proiectele noastre"
+    subtitle="Inițiative concrete prin care transformăm compasiunea în acțiune și sprijin pentru comunitate"
+    showCTA={false}
+  />
+
+  <section class="section">
+    <div class="container">
+      <!-- Categorie Tabs -->
+      <div class="filter-tabs" role="tablist" aria-label="Filtrare proiecte după categorie">
+        {categorii.map((cat, idx) => (
+          <button
+            type="button"
+            class={`tab-button ${idx === 0 ? 'active' : ''}`}
+            data-filter={cat.id}
+          >
+            {cat.nume}
+          </button>
+        ))}
+      </div>
+
+      <!-- Grid proiecte -->
+      <div class="grid-3 projects-grid">
+        {toateProiectele.map(proiect => (
+          <div class="project-item" data-category={proiect.data.categorie}>
+            <ProjectCard
+              titlu={proiect.data.titlu}
+              descriere={proiect.data.descriere}
+              imagine={proiect.data.imagine}
+              categorie={proiect.data.categorie}
+              status={proiect.data.status}
+              slug={proiect.id}
+            />
+          </div>
+        ))}
+      </div>
+
+      {toateProiectele.length === 0 && (
+        <p class="text-center no-projects">Nu există proiecte disponibile momentan.</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.tab-button');
+  const items = document.querySelectorAll<HTMLElement>('.project-item');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.filter;
+      items.forEach(item => {
+        if (filter === 'toate' || item.dataset.category === filter) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .filter-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    justify-content: center;
+    margin-bottom: var(--space-xl);
+  }
+  .tab-button {
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-full, 9999px);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .tab-button:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  .tab-button.active {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+  }
+  .projects-grid {
+    margin-top: var(--space-md);
+  }
+  .no-projects {
+    padding: var(--space-2xl) 0;
+    color: var(--color-text-light);
+    font-size: 1.1rem;
+  }
+</style>

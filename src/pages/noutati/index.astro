@@ -1,0 +1,49 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import NewsCard from '@/components/NewsCard.astro';
+import { getCollection } from 'astro:content';
+
+const articole = (await getCollection('noutati'))
+  .sort((a, b) => new Date(b.data.data).getTime() - new Date(a.data.data).getTime());
+---
+
+<BaseLayout title="Noutăți" description="Ultimele știri, evenimente și actualizări din activitatea Asociației Masa Rotundă Timișoara.">
+  <Hero
+    title="Noutăți"
+    subtitle="Fii la curent cu ultimele acțiuni, evenimente și povești de succes din comunitatea noastră"
+    showCTA={false}
+  />
+
+  <section class="section">
+    <div class="container">
+      {articole.length > 0 ? (
+        <div class="grid-2 news-grid">
+          {articole.map(articol => (
+            <NewsCard
+              titlu={articol.data.titlu}
+              descriere={articol.data.descriere}
+              imagine={articol.data.imagine}
+              data={articol.data.data}
+              categorie={articol.data.categorie}
+              slug={articol.id}
+            />
+          ))}
+        </div>
+      ) : (
+        <p class="text-center no-news">Nu există noutăți publicate momentan.</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .news-grid {
+    gap: var(--space-xl);
+  }
+  .no-news {
+    padding: var(--space-2xl) 0;
+    color: var(--color-text-light);
+    font-size: 1.1rem;
+  }
+</style>

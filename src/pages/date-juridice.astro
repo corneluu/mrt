@@ -1,0 +1,167 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+---
+
+<BaseLayout
+  title="Date juridice"
+  description="Informațiile oficiale de identificare fiscală și juridică ale Asociației Masa Rotundă Timișoara."
+>
+  <div class="section">
+    <div class="container content-container">
+      <SectionHeading title="Date juridice și fiscale" subtitle="Informații oficiale de identificare ale organizației non-profit" />
+
+      <div class="card legal-info-card">
+        <div class="legal-table">
+          <div class="legal-row">
+            <span class="legal-label">Denumirea completă:</span>
+            <span class="legal-value">
+              <!-- PLACEHOLDER: Denumire completă -->
+              Asociația Masa Rotundă Timișoara
+            </span>
+          </div>
+
+          <div class="legal-row">
+            <span class="legal-label">Forma juridică:</span>
+            <span class="legal-value">Organizație neguvernamentală (ONG), persoană juridică română de drept privat fără scop patrimonial</span>
+          </div>
+
+          <div class="legal-row">
+            <span class="legal-label">Cod de Identificare Fiscală (CUI):</span>
+            <span class="legal-value font-mono">
+              <!-- PLACEHOLDER: CUI -->
+              RO12345678
+            </span>
+          </div>
+
+          <div class="legal-row">
+            <span class="legal-label">Nr. înregistrare Registrul Asociațiilor:</span>
+            <span class="legal-value font-mono">
+              <!-- PLACEHOLDER: Nr. înregistrare Registrul Asociațiilor -->
+              00/A/2020 (Judecătoria Timișoara)
+            </span>
+          </div>
+
+          <div class="legal-row">
+            <span class="legal-label">Sediul social:</span>
+            <span class="legal-value">Str. Corbului nr. 1, Timișoara, Județul Timiș, Cod Poștal 300236, România</span>
+          </div>
+
+          <div class="legal-row">
+            <span class="legal-label">Cont Bancar (IBAN RON):</span>
+            <span class="legal-value font-mono">
+              <!-- PLACEHOLDER: IBAN -->
+              RO49 BTRL 0000 0000 0000 0000
+            </span>
+          </div>
+
+          <div class="legal-row">
+            <span class="legal-label">Banca:</span>
+            <span class="legal-value">
+              <!-- PLACEHOLDER: Banca -->
+              Banca Transilvania Timișoara
+            </span>
+          </div>
+
+          <div class="legal-row">
+            <span class="legal-label">Adresă de e-mail:</span>
+            <span class="legal-value"><a href="mailto:mrt@gmail.com">mrt@gmail.com</a></span>
+          </div>
+
+          <div class="legal-row">
+            <span class="legal-label">Telefon:</span>
+            <span class="legal-value"><a href="tel:0771569557">0771 569 557</a></span>
+          </div>
+        </div>
+
+        <div class="legal-transparency-note">
+          <h4>Notă privind transparența și statutul</h4>
+          <p>
+            Asociația Masa Rotundă Timișoara activează în conformitate cu Ordonanța Guvernului nr. 26/2000 cu privire la asociații și fundații. Toate activitățile și fondurile sunt administrate exclusiv în vederea atingerii obiectivelor statutare de sprijin comunitar și asistență socială.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .content-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .legal-info-card {
+    padding: var(--space-xl);
+    border: 1px solid var(--color-border);
+  }
+  .legal-table {
+    display: flex;
+    flex-direction: column;
+    divide-y: 1px solid var(--color-border);
+  }
+  .legal-row {
+    display: flex;
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border);
+    gap: var(--space-md);
+  }
+  .legal-row:last-child {
+    border-bottom: none;
+  }
+  @media (max-width: 650px) {
+    .legal-row {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+  }
+  .legal-label {
+    width: 35%;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+    flex-shrink: 0;
+  }
+  @media (max-width: 650px) {
+    .legal-label {
+      width: 100%;
+    }
+  }
+  .legal-value {
+    width: 65%;
+    font-size: 1rem;
+    color: var(--color-text);
+  }
+  @media (max-width: 650px) {
+    .legal-value {
+      width: 100%;
+    }
+  }
+  .legal-value a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .legal-value a:hover {
+    text-decoration: underline;
+  }
+  .font-mono {
+    font-family: monospace;
+    font-size: 0.95rem;
+  }
+  .legal-transparency-note {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+  }
+  .legal-transparency-note h4 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-xs);
+    font-size: 1.1rem;
+  }
+  .legal-transparency-note p {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,203 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const articole = await getCollection('noutati');
+  return articole.map(articol => ({
+    params: { slug: articol.id.replace(/\.(md|mdx)$/, '') },
+    props: { articol },
+  }));
+}
+
+const { articol } = Astro.props;
+const { Content } = await render(articol);
+
+const dataObj = articol.data.data instanceof Date ? articol.data.data : new Date(articol.data.data);
+
+const dataFormatata = new Intl.DateTimeFormat('ro-RO', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(dataObj);
+---
+
+<BaseLayout title={articol.data.titlu} description={articol.data.descriere}>
+  <article class="section">
+    <div class="container article-detail">
+      <nav class="breadcrumb" aria-label="Navigare ierarhică">
+        <a href="/">Acasă</a> ›
+        <a href="/noutati/">Noutăți</a> ›
+        <span aria-current="page">{articol.data.titlu}</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          {articol.data.categorie && (
+            <span class="badge">{articol.data.categorie}</span>
+          )}
+          <time datetime={dataObj.toISOString()}>{dataFormatata}</time>
+          {articol.data.autor && (
+            <span class="author">De {articol.data.autor}</span>
+          )}
+        </div>
+        <h1>{articol.data.titlu}</h1>
+        {articol.data.descriere && (
+          <p class="article-lead">{articol.data.descriere}</p>
+        )}
+      </header>
+
+      {articol.data.imagine && (
+        <img
+          src={articol.data.imagine}
+          alt={articol.data.titlu}
+          class="article-image"
+          width="1200"
+          height="600"
+          loading="eager"
+        />
+      )}
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <!-- Share buttons & Back link -->
+      <footer class="article-footer">
+        <div class="share-buttons">
+          <span class="share-label">Distribuie articolul:</span>
+          <a
+            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(Astro.url.href)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-sm btn-social"
+          >
+            Facebook
+          </a>
+          <a
+            href={`mailto:?subject=${encodeURIComponent(articol.data.titlu)}&body=${encodeURIComponent(Astro.url.href)}`}
+            class="btn btn-sm btn-social"
+          >
+            Email
+          </a>
+        </div>
+        <div>
+          <a href="/noutati/" class="btn btn-secondary btn-sm">← Înapoi la noutăți</a>
+        </div>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .article-detail {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .breadcrumb {
+    font-size: 0.9rem;
+    margin-bottom: var(--space-lg);
+    color: var(--color-text-light);
+  }
+  .breadcrumb a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+  .article-header {
+    margin-bottom: var(--space-lg);
+  }
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--space-sm);
+    flex-wrap: wrap;
+  }
+  .badge {
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    color: var(--color-primary);
+    text-transform: capitalize;
+  }
+  .article-header h1 {
+    font-size: 2.2rem;
+    color: var(--color-primary);
+    margin-bottom: var(--space-sm);
+    line-height: 1.25;
+  }
+  .article-lead {
+    font-size: 1.15rem;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-top: var(--space-sm);
+  }
+  .article-image {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-xl);
+    aspect-ratio: 2/1;
+    object-fit: cover;
+    background: var(--color-bg-alt);
+  }
+  .prose {
+    line-height: 1.8;
+    margin-bottom: var(--space-xl);
+  }
+  .prose h2 {
+    color: var(--color-primary);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+  }
+  .prose p {
+    margin-bottom: var(--space-md);
+  }
+  .prose ul, .prose ol {
+    padding-left: var(--space-lg);
+    margin-bottom: var(--space-md);
+  }
+  .prose li {
+    margin-bottom: var(--space-xs);
+  }
+  .article-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-border);
+  }
+  .share-buttons {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+  .share-label {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-right: var(--space-xs);
+  }
+  .btn-sm {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  .btn-social {
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+  .btn-social:hover {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+  }
+</style>

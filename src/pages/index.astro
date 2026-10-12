@@ -1,0 +1,93 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import ImpactNumbers from '@/components/ImpactNumbers.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import PartnerGrid from '@/components/PartnerGrid.astro';
+import { getCollection } from 'astro:content';
+
+const proiecte = (await getCollection('proiecte'))
+  .filter(p => p.data.status === 'activ')
+  .sort((a, b) => b.data.dataStart.getTime() - a.data.dataStart.getTime())
+  .slice(0, 3);
+
+const parteneri = (await getCollection('parteneri'))
+  .sort((a, b) => a.data.ordine - b.data.ordine);
+---
+
+<BaseLayout
+  title="Acasă"
+  description="Masa Rotundă Timișoara este un ONG caritabil dedicat meselor calde, educației copiilor defavorizați și caravanelor medicale în Timișoara și județul Timiș."
+>
+  <Hero
+    title="Împreună pentru cei aflați în nevoie"
+    subtitle="Masa Rotundă Timișoara este o organizație non-profit dedicată acțiunilor de caritate și sprijin comunitar. Credem că fiecare gest de bunătate contează."
+  />
+
+  <!-- Misiune scurtă -->
+  <section class="section">
+    <div class="container text-center">
+      <SectionHeading title="Misiunea noastră" />
+      <p style="max-width: 700px; margin: 0 auto; font-size: 1.1rem; line-height: 1.8;">
+        Ne dedicăm sprijinirii persoanelor vulnerabile din Timișoara și județul Timiș prin programe de asistență socială, educație și sănătate. Credem în puterea comunității de a transforma vieți.
+      </p>
+    </div>
+  </section>
+
+  <!-- Cifre de impact -->
+  <ImpactNumbers />
+
+  <!-- Proiecte recente -->
+  <section class="section">
+    <div class="container">
+      <SectionHeading title="Proiectele noastre" subtitle="Descoperă programele prin care facem diferența în comunitate" />
+      <div class="grid-3">
+        {proiecte.map(proiect => (
+          <ProjectCard
+            titlu={proiect.data.titlu}
+            descriere={proiect.data.descriere}
+            imagine={proiect.data.imagine}
+            categorie={proiect.data.categorie}
+            status={proiect.data.status}
+            slug={proiect.id}
+          />
+        ))}
+      </div>
+      <div class="text-center" style="margin-top: var(--space-xl);">
+        <a href="/proiecte/" class="btn btn-secondary">Vezi toate proiectele</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Voluntariat -->
+  <section class="section cta-section">
+    <div class="container text-center">
+      <h2>Vrei să faci diferența?</h2>
+      <p style="max-width: 600px; margin: var(--space-md) auto;">Alătură-te echipei noastre de voluntari și contribuie la schimbarea pe care vrei să o vezi în comunitate.</p>
+      <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+        <a href="/voluntariat/" class="btn btn-primary">Fii voluntar</a>
+        <a href="/donatii/" class="btn btn-accent">Donează acum</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Parteneri -->
+  <section class="section">
+    <div class="container">
+      <SectionHeading title="Partenerii noștri" subtitle="Mulțumim organizațiilor care ne susțin misiunea" />
+      <PartnerGrid parteneri={parteneri.map(p => p.data)} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .cta-section {
+    background: var(--color-bg-alt);
+    padding: var(--space-2xl) 0;
+  }
+  .cta-section h2 {
+    color: var(--color-primary);
+    font-size: 2rem;
+  }
+</style>

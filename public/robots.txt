@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Prevent crawlers from indexing internal configuration or query parameters
+Disallow: /admin/
+Disallow: /admin
+Disallow: /private/
+Disallow: /*?*
+
+Sitemap: https://mrt.ro/sitemap-index.xml
