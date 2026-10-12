@@ -342,7 +342,7 @@ const subjects: Record<string, string> = {
   }
 
   .required-star {
-    color: var(--color-error, #E53E3E);
+    color: var(--color-error);
     font-weight: bold;
   }
 
@@ -350,7 +350,7 @@ const subjects: Record<string, string> = {
   .field-error-msg {
     display: none;
     font-size: 0.8rem;
-    color: var(--color-error, #E53E3E);
+    color: var(--color-error);
     font-weight: 600;
     margin-top: 2px;
   }
@@ -362,13 +362,13 @@ const subjects: Record<string, string> = {
   .form-group.has-error input,
   .form-group.has-error textarea,
   .form-group.has-error select {
-    border-color: var(--color-error, #E53E3E) !important;
+    border-color: var(--color-error) !important;
     background-color: #FFF5F5;
     box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15) !important;
   }
 
   .form-group.has-error .form-check-label {
-    color: var(--color-error, #E53E3E);
+    color: var(--color-error);
   }
 
   /* Form Alerts */
@@ -381,14 +381,14 @@ const subjects: Record<string, string> = {
   }
 
   .alert-success {
-    background-color: #DEF7EC;
-    border: 1px solid #31C48D;
-    color: #03543F;
+    background-color: rgba(56, 161, 105, 0.12);
+    border: 1px solid var(--color-success);
+    color: #1c5232;
   }
 
   .alert-error {
-    background-color: #FDE8E8;
-    border: 1px solid #F98080;
+    background-color: rgba(229, 62, 62, 0.1);
+    border: 1px solid var(--color-error);
     color: #9B1C1C;
   }
 

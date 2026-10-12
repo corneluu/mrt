@@ -7,33 +7,39 @@
    1. CSS CUSTOM PROPERTIES (DESIGN TOKENS)
    -------------------------------------------------------------------------- */
 :root {
-  /* Brand Colors */
-  --color-primary: #1B3A5C;          /* Deep navy blue */
-  --color-primary-light: #2A5580;    /* Medium navy */
-  --color-primary-dark: #0F2740;     /* Dark navy */
-  --color-secondary: #C75146;        /* Warm red - CTA / Donează */
-  --color-secondary-light: #D4685F;  /* Warm red hover */
-  --color-secondary-dark: #A33D34;   /* Warm red active */
-  --color-accent: #D4A843;           /* Gold */
-  --color-accent-light: #E0BE6A;     /* Soft gold */
-  --color-accent-dark: #B88E2D;      /* Deep gold */
+  /* Primary – Navy profund (încredere, profesionalism) */
+  --color-primary:        #1A365D;
+  --color-primary-dark:   #0F2740;
+  --color-primary-light:  #2B4C7E;
 
-  /* Surface & Background Colors */
-  --color-bg: #FAF9F6;              /* Warm off-white */
-  --color-bg-alt: #F0EFEB;          /* Soft light gray */
-  --color-white: #FFFFFF;           /* Pure white */
+  /* Secondary – Coral-roșu (urgență, donații, acțiune) */
+  --color-secondary:      #C45C4A;
+  --color-secondary-dark: #A3483A;
+  --color-secondary-light:#D47A6B;
 
-  /* Typography & Border Colors */
-  --color-text: #2D3748;            /* Dark blue-gray for body text */
-  --color-text-light: #5A6578;      /* Secondary text */
-  --color-text-muted: #718096;      /* Muted / caption text */
-  --color-border: #E2E0DC;          /* Subtle border */
-  --color-border-dark: #CBD5E0;     /* Strong border */
+  /* Accent – Gold elegant (logo, highlights, valori) */
+  --color-accent:         #D4A843;
+  --color-accent-dark:    #B8902F;
+  --color-accent-light:   #E0BE6A;
 
-  /* Feedback Colors */
-  --color-success: #48BB78;          /* Green success */
-  --color-warning: #ED8936;          /* Orange warning */
-  --color-error: #E53E3E;            /* Red error */
+  /* Backgrounds – calde, premium */
+  --color-bg:             #FAF9F6;
+  --color-bg-alt:         #F3F1EC;
+  --color-bg-dark:        #0F2740;
+  --color-white:          #FFFFFF;
+
+  /* Text */
+  --color-text:           #1A202C;
+  --color-text-light:     #4A5568;
+  --color-text-muted:     #718096;
+  --color-text-on-dark:   #F7FAFC;
+
+  /* Borders & utilities */
+  --color-border:         #E2E0DC;
+  --color-border-dark:    #CBD5E0;
+  --color-success:        #38A169;
+  --color-warning:        #ED8936;
+  --color-error:          #E53E3E;
 
   /* Typography */
   --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -232,7 +238,7 @@ a:hover {
    5. ACCESSIBILITY & SCREEN READERS
    -------------------------------------------------------------------------- */
 :focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
@@ -282,10 +288,10 @@ a:hover {
 .container-narrow { max-width: var(--max-width-narrow); }
 .container-wide { max-width: var(--max-width-wide); }
 
-/* Section vertical spacing */
-.section { padding-block: var(--space-2xl); }
-.section-sm { padding-block: var(--space-lg); }
-.section-lg { padding-block: var(--space-3xl); }
+/* Section vertical spacing (minim 4.5–6rem) */
+.section { padding-block: clamp(4.5rem, 6vw, 6rem); }
+.section-sm { padding-block: var(--space-xl); }
+.section-lg { padding-block: clamp(5rem, 8vw, 7rem); }
 .section-alt { background-color: var(--color-bg-alt); }
 
 .section-primary {
@@ -337,19 +343,19 @@ a:hover {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   line-height: 1.25;
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
   border: 2px solid transparent;
   cursor: pointer;
   text-decoration: none;
   text-align: center;
   white-space: nowrap;
   user-select: none;
-  transition: all var(--transition-normal);
+  transition: all 0.25s ease;
 }
 
 .btn:active { transform: translateY(1px); }
 
-/* Primary Button (Secondary warm red for donate & high-priority CTAs) */
+/* Primary Button (Coral-roșu pentru donații & acțiune) */
 .btn-primary {
   background-color: var(--color-secondary);
   color: var(--color-white);
@@ -360,11 +366,11 @@ a:hover {
   background-color: var(--color-secondary-dark);
   border-color: var(--color-secondary-dark);
   color: var(--color-white);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(196, 92, 74, 0.35);
+  transform: translateY(-2px) scale(1.02);
 }
 
-/* Secondary Button (Deep navy outline) */
+/* Secondary Button (Outline navy) */
 .btn-secondary {
   background-color: transparent;
   color: var(--color-primary);
@@ -374,8 +380,8 @@ a:hover {
 .btn-secondary:hover {
   background-color: var(--color-primary);
   color: var(--color-white);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(26, 54, 93, 0.25);
+  transform: translateY(-2px) scale(1.02);
 }
 
 /* Accent Button (Gold) */
@@ -383,14 +389,15 @@ a:hover {
   background-color: var(--color-accent);
   color: var(--color-primary-dark);
   border-color: var(--color-accent);
+  font-weight: 700;
 }
 
 .btn-accent:hover {
   background-color: var(--color-accent-light);
   border-color: var(--color-accent-light);
   color: var(--color-primary-dark);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(212, 168, 67, 0.35);
+  transform: translateY(-2px) scale(1.02);
 }
 
 /* White Button (for colored sections) */
@@ -450,7 +457,7 @@ a:hover {
 .card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
-  border-color: rgba(27, 58, 92, 0.2);
+  border-color: rgba(26, 54, 93, 0.2);
 }
 
 .card-img,
@@ -514,23 +521,23 @@ a:hover {
 }
 
 .badge-primary {
-  background-color: rgba(27, 58, 92, 0.1);
+  background-color: rgba(26, 54, 93, 0.1);
   color: var(--color-primary);
 }
 
 .badge-secondary {
-  background-color: rgba(199, 81, 70, 0.12);
+  background-color: rgba(196, 92, 74, 0.12);
   color: var(--color-secondary);
 }
 
 .badge-accent {
   background-color: rgba(212, 168, 67, 0.18);
-  color: #8A6517;
+  color: var(--color-accent-dark);
 }
 
 .badge-success {
-  background-color: rgba(72, 187, 120, 0.15);
-  color: #22543D;
+  background-color: rgba(56, 161, 105, 0.15);
+  color: #1c5232;
 }
 
 .badge-social {
@@ -602,7 +609,7 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--color-primary-light);
-  box-shadow: 0 0 0 3px rgba(42, 85, 128, 0.18);
+  box-shadow: 0 0 0 3px rgba(43, 76, 126, 0.2);
 }
 
 textarea {

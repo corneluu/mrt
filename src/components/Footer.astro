@@ -127,7 +127,7 @@ const footerLinks = [
 <style>
   .site-footer {
     background: var(--color-primary-dark);
-    color: var(--color-white);
+    color: var(--color-text-on-dark);
     padding: var(--space-2xl) 0 var(--space-lg);
     margin-top: var(--space-3xl);
   }
@@ -154,7 +154,7 @@ const footerLinks = [
     height: 48px;
     object-fit: contain;
     border-radius: 50%;
-    background-color: #ffffff;
+    background-color: var(--color-white);
     padding: 3px;
   }
 
@@ -175,7 +175,7 @@ const footerLinks = [
 
   .footer-tagline {
     font-size: 0.9rem;
-    opacity: 0.8;
+    opacity: 0.85;
     line-height: 1.6;
     margin-bottom: var(--space-md);
     max-width: 320px;
@@ -195,7 +195,7 @@ const footerLinks = [
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
     color: var(--color-white);
-    transition: background var(--transition), transform var(--transition);
+    transition: background 0.25s ease, transform 0.25s ease;
   }
 
   .social-link:hover,
@@ -208,7 +208,7 @@ const footerLinks = [
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: var(--space-md);
-    color: var(--color-accent-light);
+    color: var(--color-accent);
   }
 
   .footer-col ul {
@@ -222,7 +222,7 @@ const footerLinks = [
   }
 
   .footer-col a {
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     font-size: 0.9rem;
     transition: color var(--transition);

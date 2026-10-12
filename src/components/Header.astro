@@ -165,6 +165,24 @@ function isActive(rawHref: string): boolean {
     font-size: 0.9rem;
   }
 
+  .header-actions .btn,
+  .mobile-donate-item .btn {
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+    color: var(--color-white);
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+  }
+
+  .header-actions .btn:hover,
+  .mobile-donate-item .btn:hover {
+    background-color: var(--color-secondary-dark);
+    border-color: var(--color-secondary-dark);
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 4px 12px rgba(196, 92, 74, 0.35);
+  }
+
   /* Hamburger menu button */
   .menu-toggle {
     display: none;

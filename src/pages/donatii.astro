@@ -5,10 +5,10 @@ import Hero from '@/components/Hero.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
 
 const distributieFonduri = [
-  { domeniu: 'Programe sociale și hrană caldă', procent: 60, culoare: '#2E7D32', descriere: 'Mese calde săptămânale și pachete cu alimente de bază.' },
-  { domeniu: 'Educație și rechizite școlare', procent: 20, culoare: '#1976D2', descriere: 'Meditații, ghiozdane echipate și tabere pentru copii.' },
-  { domeniu: 'Sănătate și caravane medicale', procent: 15, culoare: '#D97706', descriere: 'Consultații medicale gratuite în zonele rurale defavorizate.' },
-  { domeniu: 'Logistică și administrare', procent: 5, culoare: '#64748B', descriere: 'Costuri minime de transport, depozitare și organizare.' },
+  { domeniu: 'Programe sociale și hrană caldă', procent: 60, culoare: '#38A169', descriere: 'Mese calde săptămânale și pachete cu alimente de bază.' },
+  { domeniu: 'Educație și rechizite școlare', procent: 20, culoare: '#1A365D', descriere: 'Meditații, ghiozdane echipate și tabere pentru copii.' },
+  { domeniu: 'Sănătate și caravane medicale', procent: 15, culoare: '#D4A843', descriere: 'Consultații medicale gratuite în zonele rurale defavorizate.' },
+  { domeniu: 'Logistică și administrare', procent: 5, culoare: '#718096', descriere: 'Costuri minime de transport, depozitare și organizare.' },
 ];
 ---
 
@@ -262,7 +262,7 @@ const distributieFonduri = [
           if (btnText) btnText.textContent = 'IBAN Copiat!';
           if (statusText) {
             statusText.textContent = '✓ Copiat în clipboard!';
-            statusText.style.color = 'var(--color-success, #2E7D32)';
+            statusText.style.color = 'var(--color-success)';
           }
           mainBtn.classList.add('copied');
           setTimeout(() => {
@@ -476,14 +476,14 @@ const distributieFonduri = [
   }
 
   .mini-copy-btn.copied {
-    background: var(--color-success, #2E7D32);
-    color: #fff;
-    border-color: var(--color-success, #2E7D32);
+    background: var(--color-success);
+    color: var(--color-white);
+    border-color: var(--color-success);
   }
 
   /* Major IBAN Box */
   .iban-major-box {
-    background: #F8F9FA;
+    background: var(--color-bg-alt);
     border: 2px solid var(--color-accent);
     border-radius: var(--radius-md);
     padding: var(--space-md);
@@ -541,8 +541,8 @@ const distributieFonduri = [
   }
 
   .btn-copy-large.copied {
-    background: var(--color-success, #2E7D32);
-    border-color: var(--color-success, #2E7D32);
+    background: var(--color-success);
+    border-color: var(--color-success);
   }
 
   .bank-card-footer {
@@ -585,8 +585,8 @@ const distributieFonduri = [
 
   .step-badge {
     display: inline-block;
-    background: rgba(72, 187, 120, 0.2);
-    color: #22543D;
+    background: rgba(56, 161, 105, 0.15);
+    color: #1c5232;
     font-weight: 700;
     font-size: 0.8rem;
     padding: 0.25rem 0.75rem;
