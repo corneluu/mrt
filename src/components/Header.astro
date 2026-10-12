@@ -1,7 +1,9 @@
 ---
+import { getRelativePath } from '@/utils/paths';
+
 const currentPath = Astro.url.pathname;
 
-const navLinks = [
+const rawNavLinks = [
   { href: '/', label: 'Acasă' },
   { href: '/despre/', label: 'Despre noi' },
   { href: '/proiecte/', label: 'Proiecte' },
@@ -12,16 +14,26 @@ const navLinks = [
   { href: '/contact/', label: 'Contact' },
 ];
 
-function isActive(href: string): boolean {
-  if (href === '/') return currentPath === '/';
-  return currentPath.startsWith(href);
+const navLinks = rawNavLinks.map(l => ({
+  href: getRelativePath(l.href),
+  label: l.label,
+  rawHref: l.href,
+}));
+
+function isActive(rawHref: string): boolean {
+  const resolved = getRelativePath(rawHref);
+  const homePath = getRelativePath('/');
+  if (rawHref === '/') {
+    return currentPath === homePath || currentPath === homePath.replace(/\/$/, '') || currentPath === '/';
+  }
+  return currentPath.startsWith(resolved);
 }
 ---
 
 <header class="site-header" id="site-header">
   <div class="container header-inner">
-    <a href="/" class="header-logo" aria-label="Masa Rotundă Timișoara – Pagina principală">
-      <img src="/images/logo-mrt.png" alt="Logo Masa Rotundă Timișoara" width="48" height="48" />
+    <a href={getRelativePath('/')} class="header-logo" aria-label="Masa Rotundă Timișoara – Pagina principală">
+      <img src={getRelativePath('/images/logo-mrt.png')} alt="Logo Masa Rotundă Timișoara" width="48" height="48" />
       <span class="header-logo-text">
         <strong>Masa Rotundă</strong>
         <small>Timișoara</small>
@@ -34,21 +46,21 @@ function isActive(href: string): boolean {
           <li>
             <a
               href={link.href}
-              class:list={['nav-link', { active: isActive(link.href) }]}
-              aria-current={isActive(link.href) ? 'page' : undefined}
+              class:list={['nav-link', { active: isActive(link.rawHref) }]}
+              aria-current={isActive(link.rawHref) ? 'page' : undefined}
             >
               {link.label}
             </a>
           </li>
         ))}
         <li class="mobile-donate-item">
-          <a href="/donatii/" class="btn btn-primary btn-block">Donează acum</a>
+          <a href={getRelativePath('/donatii/')} class="btn btn-primary btn-block">Donează acum</a>
         </li>
       </ul>
     </nav>
 
     <div class="header-actions">
-      <a href="/donatii/" class="btn btn-primary btn-sm">Donează</a>
+      <a href={getRelativePath('/donatii/')} class="btn btn-primary btn-sm">Donează</a>
       <button
         class="menu-toggle"
         id="menu-toggle"

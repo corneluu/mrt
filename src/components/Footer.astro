@@ -1,4 +1,6 @@
 ---
+import { getRelativePath } from '@/utils/paths';
+
 const currentYear = new Date().getFullYear();
 
 const socialLinks = [
@@ -33,27 +35,27 @@ const footerLinks = [
   {
     title: 'Organizația',
     links: [
-      { label: 'Despre noi', href: '/despre/' },
-      { label: 'Proiecte', href: '/proiecte/' },
-      { label: 'Noutăți', href: '/noutati/' },
-      { label: 'Galerie', href: '/galerie/' },
+      { label: 'Despre noi', href: getRelativePath('/despre/') },
+      { label: 'Proiecte', href: getRelativePath('/proiecte/') },
+      { label: 'Noutăți', href: getRelativePath('/noutati/') },
+      { label: 'Galerie', href: getRelativePath('/galerie/') },
     ],
   },
   {
     title: 'Implică-te',
     links: [
-      { label: 'Donează', href: '/donatii/' },
-      { label: 'Fii voluntar', href: '/voluntariat/' },
-      { label: 'Parteneri', href: '/parteneri/' },
-      { label: 'Contact', href: '/contact/' },
+      { label: 'Donează', href: getRelativePath('/donatii/') },
+      { label: 'Fii voluntar', href: getRelativePath('/voluntariat/') },
+      { label: 'Parteneri', href: getRelativePath('/parteneri/') },
+      { label: 'Contact', href: getRelativePath('/contact/') },
     ],
   },
   {
     title: 'Legal',
     links: [
-      { label: 'Confidențialitate', href: '/confidentialitate/' },
-      { label: 'Termeni și condiții', href: '/termeni/' },
-      { label: 'Date juridice', href: '/date-juridice/' },
+      { label: 'Confidențialitate', href: getRelativePath('/confidentialitate/') },
+      { label: 'Termeni și condiții', href: getRelativePath('/termeni/') },
+      { label: 'Date juridice', href: getRelativePath('/date-juridice/') },
     ],
   },
 ];
@@ -64,8 +66,8 @@ const footerLinks = [
     <div class="footer-grid">
       <!-- Brand -->
       <div class="footer-brand">
-        <a href="/" class="footer-logo" aria-label="Masa Rotundă Timișoara">
-          <img src="/images/logo-mrt.png" alt="Masa Rotundă Timișoara Logo" width="56" height="56" />
+        <a href={getRelativePath('/')} class="footer-logo" aria-label="Masa Rotundă Timișoara">
+          <img src={getRelativePath('/images/logo-mrt.png')} alt="Masa Rotundă Timișoara Logo" width="56" height="56" />
           <span>
             <strong>Masa Rotundă</strong>
             <small>Timișoara</small>

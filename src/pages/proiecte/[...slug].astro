@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getRelativePath } from '@/utils/paths';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -32,8 +33,8 @@ const categorieLabels: Record<string, string> = {
   <article class="section">
     <div class="container project-detail">
       <nav class="breadcrumb" aria-label="Navigare ierarhică">
-        <a href="/">Acasă</a> ›
-        <a href="/proiecte/">Proiecte</a> ›
+        <a href={getRelativePath('/')}>Acasă</a> ›
+        <a href={getRelativePath('/proiecte/')}>Proiecte</a> ›
         <span aria-current="page">{proiect.data.titlu}</span>
       </nav>
 
@@ -46,7 +47,7 @@ const categorieLabels: Record<string, string> = {
         <p class="project-desc">{proiect.data.descriere}</p>
       </header>
 
-      <img src={proiect.data.imagine} alt={proiect.data.titlu} class="project-image" width="1200" height="600" loading="eager" />
+      <img src={getRelativePath(proiect.data.imagine)} alt={proiect.data.titlu} class="project-image" width="1200" height="600" loading="eager" />
 
       <div class="project-info-grid">
         {proiect.data.locatie && (
@@ -78,8 +79,8 @@ const categorieLabels: Record<string, string> = {
       </div>
 
       <div class="project-cta">
-        <a href="/donatii/" class="btn btn-primary">Susține acest proiect</a>
-        <a href="/voluntariat/" class="btn btn-secondary">Fii voluntar</a>
+        <a href={getRelativePath('/donatii/')} class="btn btn-primary">Susține acest proiect</a>
+        <a href={getRelativePath('/voluntariat/')} class="btn btn-secondary">Fii voluntar</a>
       </div>
     </div>
   </article>

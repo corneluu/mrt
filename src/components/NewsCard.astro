@@ -1,4 +1,6 @@
 ---
+import { getRelativePath } from '@/utils/paths';
+
 interface Props {
   titlu: string;
   descriere?: string;
@@ -32,7 +34,7 @@ const formattedDate = new Intl.DateTimeFormat('ro-RO', {
 }).format(dateObj);
 
 const cleanSlug = slug.replace(/\.(md|mdx|json)$/, '');
-const articleUrl = `/noutati/${cleanSlug}/`;
+const articleUrl = getRelativePath(`/noutati/${cleanSlug}/`);
 
 const categorieMap: Record<string, string> = {
   eveniment: 'Eveniment',
@@ -48,7 +50,7 @@ const categoryLabel = categorieMap[categorie] ?? (categorie.charAt(0).toUpperCas
   <div class="card-image-wrap">
     <a href={articleUrl} tabindex="-1" aria-hidden="true">
       <img
-        src={imagine}
+        src={getRelativePath(imagine)}
         alt={titlu}
         loading="lazy"
         decoding="async"

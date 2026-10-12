@@ -1,4 +1,6 @@
 ---
+import { getRelativePath } from '@/utils/paths';
+
 interface Partener {
   nume: string;
   logo: string;
@@ -20,7 +22,7 @@ const { parteneri } = Astro.props;
       <div class="partner-card">
         <div class="partner-logo-box">
           <img
-            src={partener.logo}
+            src={getRelativePath(partener.logo)}
             alt={`Logo ${partener.nume}`}
             loading="lazy"
             width="160"

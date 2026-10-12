@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getRelativePath } from '@/utils/paths';
 import Hero from '@/components/Hero.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
 
@@ -27,26 +28,28 @@ const imaginiGalerie = [
       <SectionHeading title="Momente din activitatea noastră" subtitle="Fiecare imagine spune povestea unui gest de sprijin și a unui zâmbet redat" />
 
       <div class="gallery-grid">
-        {imaginiGalerie.map(img => (
-          <div class="gallery-card">
-            <a href={img.src} target="_blank" rel="noopener noreferrer" class="gallery-link" title={img.titlu}>
-              <div class="gallery-image-wrapper">
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  class="gallery-img"
-                  loading="lazy"
-                  width="600"
-                  height="450"
-                  onerror="this.style.opacity='0.5'"
-                />
+        {imaginiGalerie.map(img => {
+          const resolvedSrc = getRelativePath(img.src);
+          return (
+            <div class="gallery-card">
+              <a href={resolvedSrc} target="_blank" rel="noopener noreferrer" class="gallery-link" title={img.titlu}>
+                <div class="gallery-image-wrapper">
+                  <img
+                    src={resolvedSrc}
+                    alt={img.alt}
+                    class="gallery-img"
+                    loading="lazy"
+                    width="600"
+                    height="450"
+                  />
                 <div class="gallery-overlay">
                   <span class="gallery-caption">{img.titlu}</span>
                 </div>
               </div>
             </a>
           </div>
-        ))}
+        );
+      })}
       </div>
     </div>
   </section>

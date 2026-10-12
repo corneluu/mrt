@@ -7,4 +7,4 @@ Disallow: /admin
 Disallow: /private/
 Disallow: /*?*
 
-Sitemap: https://mrt.ro/sitemap-index.xml
+Sitemap: https://corneluu.github.io/mrt/sitemap-index.xml

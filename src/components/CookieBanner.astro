@@ -1,4 +1,5 @@
 ---
+import { getRelativePath } from '@/utils/paths';
 // CookieConsent Banner Component (GDPR-compliant, persistent via localStorage)
 ---
 
@@ -10,7 +11,7 @@
       </div>
       <p>
         Folosim doar cookie-uri esențiale pentru buna funcționare a site-ului și statistici anonime fără urmărire a datelor personale (cookieless analytics). Află mai multe în
-        <a href="/confidentialitate/">Politica de Confidențialitate</a>.
+        <a href={getRelativePath('/confidentialitate/')}>Politica de Confidențialitate</a>.
       </p>
     </div>
     <div class="cookie-actions">

@@ -1,4 +1,6 @@
 ---
+import { getRelativePath } from '@/utils/paths';
+
 interface Props {
   title: string;
   subtitle?: string;
@@ -16,7 +18,7 @@ const {
 } = Astro.props;
 
 const heroStyle = backgroundImage
-  ? `min-height: ${minHeight}; background-image: linear-gradient(135deg, rgba(15, 39, 64, 0.92) 0%, rgba(27, 58, 92, 0.85) 100%), url('${backgroundImage}');`
+  ? `min-height: ${minHeight}; background-image: linear-gradient(135deg, rgba(15, 39, 64, 0.92) 0%, rgba(27, 58, 92, 0.85) 100%), url('${getRelativePath(backgroundImage)}');`
   : `min-height: ${minHeight};`;
 ---
 
@@ -25,7 +27,7 @@ const heroStyle = backgroundImage
     <div class="hero-logo-wrapper">
       <div class="hero-logo-badge">
         <img
-          src="/images/logo-mrt.png"
+          src={getRelativePath('/images/logo-mrt.png')}
           alt="Logo Masa Rotundă Timișoara"
           class="hero-logo"
           width="120"
@@ -45,8 +47,8 @@ const heroStyle = backgroundImage
 
     {showCTA && (
       <div class="hero-cta">
-        <a href="/donatii/" class="btn btn-primary btn-lg">Donează</a>
-        <a href="/voluntariat/" class="btn btn-secondary btn-lg">Fii voluntar</a>
+        <a href={getRelativePath('/donatii/')} class="btn btn-primary btn-lg">Donează</a>
+        <a href={getRelativePath('/voluntariat/')} class="btn btn-secondary btn-lg">Fii voluntar</a>
       </div>
     )}
   </div>

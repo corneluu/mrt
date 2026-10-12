@@ -1,4 +1,6 @@
 ---
+import { getRelativePath } from '@/utils/paths';
+
 interface Props {
   titlu: string;
   descriere: string;
@@ -11,7 +13,7 @@ interface Props {
 const { titlu, descriere, imagine, categorie, status, slug } = Astro.props;
 
 const cleanSlug = slug.replace(/\.(md|mdx|json)$/, '');
-const projectUrl = `/proiecte/${cleanSlug}/`;
+const projectUrl = getRelativePath(`/proiecte/${cleanSlug}/`);
 
 const categorieMap: Record<string, string> = {
   educatie: 'Educație',
@@ -35,7 +37,7 @@ const statusInfo = statusMap[status] ?? { label: status, textClass: 'status-defa
   <div class="card-image-wrap">
     <a href={projectUrl} tabindex="-1" aria-hidden="true">
       <img
-        src={imagine}
+        src={getRelativePath(imagine)}
         alt={titlu}
         loading="lazy"
         decoding="async"

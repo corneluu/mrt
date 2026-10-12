@@ -2,6 +2,7 @@
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import CookieBanner from '@/components/CookieBanner.astro';
+import { getRelativePath } from '@/utils/paths';
 import '@/styles/global.css';
 
 interface Props {
@@ -20,9 +21,10 @@ const {
   noindex = false,
 } = Astro.props;
 
-const siteUrl = 'https://mrt.ro';
-const pageUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
-const fullOgImage = ogImage.startsWith('http') ? ogImage : new URL(ogImage, siteUrl).href;
+const siteOrigin = Astro.site ? Astro.site.origin : 'https://corneluu.github.io';
+const resolvedOgImage = getRelativePath(ogImage);
+const fullOgImage = ogImage.startsWith('http') ? ogImage : new URL(resolvedOgImage, siteOrigin).href;
+const pageUrl = canonical || new URL(Astro.url.pathname, siteOrigin).href;
 const fullTitle = title === 'Acasă' ? 'Masa Rotundă Timișoara – Caritate și Comunitate' : `${title} | Masa Rotundă Timișoara`;
 ---
 
@@ -59,11 +61,11 @@ const fullTitle = title === 'Acasă' ? 'Masa Rotundă Timișoara – Caritate ș
     <meta name="twitter:image" content={fullOgImage} />
 
     <!-- Favicon Set (Complete multi-resolution) -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" href="/images/logo-mrt.png" />
+    <link rel="icon" type="image/x-icon" href={getRelativePath('/favicon.ico')} />
+    <link rel="icon" type="image/png" sizes="32x32" href={getRelativePath('/favicon-32x32.png')} />
+    <link rel="icon" type="image/png" sizes="16x16" href={getRelativePath('/favicon-16x16.png')} />
+    <link rel="apple-touch-icon" sizes="180x180" href={getRelativePath('/apple-touch-icon.png')} />
+    <link rel="icon" type="image/png" href={getRelativePath('/images/logo-mrt.png')} />
 
     <!-- Schema.org structured data -->
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -71,8 +73,8 @@ const fullTitle = title === 'Acasă' ? 'Masa Rotundă Timișoara – Caritate ș
       "@type": "NGO",
       "name": "Masa Rotundă Timișoara",
       "alternateName": "MRT",
-      "url": siteUrl,
-      "logo": `${siteUrl}/images/logo-mrt.png`,
+      "url": pageUrl,
+      "logo": fullOgImage,
       "description": description,
       "address": {
         "@type": "PostalAddress",

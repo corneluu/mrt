@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getRelativePath } from '@/utils/paths';
 import Hero from '@/components/Hero.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
 
@@ -238,7 +239,7 @@ const distributieFonduri = [
         <h3>Ești o companie și vrei să redirecționezi 20% din impozit?</h3>
         <p>Conform Codului Fiscal, firmele pot sponsoriza asociații fără niciun cost suplimentar, scăzând suma direct din impozitul pe profit/venit datorat.</p>
         <div class="sponsor-actions">
-          <a href="/contact/" class="btn btn-primary">Solicită contract de sponsorizare</a>
+          <a href={getRelativePath('/contact/')} class="btn btn-primary">Solicită contract de sponsorizare</a>
           <a href="tel:0771569557" class="btn btn-secondary">Sună la 0771 569 557</a>
         </div>
       </div>

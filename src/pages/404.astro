@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getRelativePath } from '@/utils/paths';
 ---
 
 <BaseLayout
@@ -17,8 +18,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
           Ne pare rău, pagina pe care o cauți nu există sau a fost mutată. Dar nu-ți face griji, nicio faptă bună și nicio căutare nu sunt irosite!
         </p>
         <div class="error-actions">
-          <a href="/" class="btn btn-primary">Înapoi acasă</a>
-          <a href="/proiecte/" class="btn btn-secondary">Vezi proiectele noastre</a>
+          <a href={getRelativePath('/')} class="btn btn-primary">Înapoi acasă</a>
+          <a href={getRelativePath('/proiecte/')} class="btn btn-secondary">Vezi proiectele noastre</a>
         </div>
       </div>
     </div>

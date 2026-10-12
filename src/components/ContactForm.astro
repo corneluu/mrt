@@ -1,4 +1,6 @@
 ---
+import { getRelativePath } from '@/utils/paths';
+
 interface Props {
   formType?: string;
   showVolunteerFields?: boolean;
@@ -131,7 +133,7 @@ const subjects: Record<string, string> = {
         <input type="checkbox" name="gdpr_consent" id={`gdpr-${formType}`} required aria-describedby={`err-gdpr-${formType}`} />
         <span class="form-check-label">
           Sunt de acord cu prelucrarea datelor mele în conformitate cu
-          <a href="/confidentialitate/" target="_blank" rel="noopener noreferrer">Politica de Confidențialitate</a>. <span class="required-star">*</span>
+          <a href={getRelativePath('/confidentialitate/')} target="_blank" rel="noopener noreferrer">Politica de Confidențialitate</a>. <span class="required-star">*</span>
         </span>
       </label>
       <span class="field-error-msg" id={`err-gdpr-${formType}`} role="alert">Acordul GDPR este obligatoriu.</span>
