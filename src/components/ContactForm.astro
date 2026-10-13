@@ -8,8 +8,8 @@ interface Props {
 
 const { formType = 'contact', showVolunteerFields = false } = Astro.props;
 
-// Read API key safely from environment variable with fallback
-const web3FormsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY || 'YOUR_ACCESS_KEY_HERE';
+// Web3Forms public form access key
+const web3FormsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY || '03cba418-7ed0-485f-88b6-bcc351cafd78';
 
 const subjects: Record<string, string> = {
   contact: 'Mesaj nou de pe mrt.ro - Contact',
@@ -146,7 +146,7 @@ const subjects: Record<string, string> = {
   </form>
 </div>
 
-<script define:vars={{ formType }}>
+<script define:vars={{ formType, showVolunteerFields }}>
   const form = document.getElementById(`form-${formType}`);
   const alertSuccess = document.getElementById(`form-alert-success-${formType}`);
   const alertError = document.getElementById(`form-alert-error-${formType}`);
@@ -280,30 +280,32 @@ const subjects: Record<string, string> = {
           headers: { 'Accept': 'application/json' }
         });
 
-        if (response.ok) {
+        const data = await response.json().catch(() => null);
+
+        if (response.ok && data?.success !== false) {
           recordSubmission();
           form.reset();
-          if (alertSuccess) alertSuccess.style.display = 'block';
+          if (alertSuccess) {
+            alertSuccess.innerHTML = '<strong>Mulțumim!</strong> Mesajul tău a fost transmis cu succes. Te vom contacta în cel mai scurt timp posibil.';
+            alertSuccess.style.display = 'block';
+          }
+          if (alertError) alertError.style.display = 'none';
           form.style.display = 'none';
         } else {
-          // If in dev/demo mode without custom key
-          recordSubmission();
-          if (alertSuccess) {
-            alertSuccess.innerHTML = '<strong>Mesaj procesat!</strong> Validare completă și securizată realizată cu succes.';
-            alertSuccess.style.display = 'block';
-            form.reset();
-            form.style.display = 'none';
+          if (alertError) {
+            const errorMsg = data?.message || 'A apărut o problemă la transmiterea formularului. Te rugăm să încerci din nou sau să ne scrii direct la email.';
+            alertError.innerHTML = `<strong>Eroare:</strong> ${errorMsg}`;
+            alertError.style.display = 'block';
           }
         }
       } catch (err) {
-        recordSubmission();
-        if (alertSuccess) {
-          alertSuccess.style.display = 'block';
-          form.style.display = 'none';
+        if (alertError) {
+          alertError.innerHTML = '<strong>Eroare de rețea:</strong> Verifică conexiunea la internet și încearcă din nou.';
+          alertError.style.display = 'block';
         }
       } finally {
         if (submitBtn) submitBtn.disabled = false;
-        if (btnText) btnText.textContent = 'Trimite';
+        if (btnText) btnText.textContent = showVolunteerFields ? 'Trimite cererea de voluntariat' : 'Trimite mesajul';
         if (spinner) spinner.style.display = 'none';
       }
     });
