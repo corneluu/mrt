@@ -12,9 +12,9 @@ const { formType = 'contact', showVolunteerFields = false } = Astro.props;
 const web3FormsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY || '03cba418-7ed0-485f-88b6-bcc351cafd78';
 
 const subjects: Record<string, string> = {
-  contact: 'Mesaj nou de pe mrt.ro - Contact',
-  voluntariat: 'Cerere nouă de voluntariat - mrt.ro',
-  parteneriat: 'Propunere de parteneriat - mrt.ro',
+  contact: '📬 [Contact MRT] Mesaj nou de la un vizitator',
+  voluntariat: '🤝 [Voluntariat MRT] Candidatură nouă de voluntar',
+  parteneriat: '💼 [Parteneriat MRT] Propunere nouă de parteneriat',
 };
 ---
 
@@ -38,7 +38,7 @@ const subjects: Record<string, string> = {
     <!-- Web3Forms access key loaded securely from env -->
     <input type="hidden" name="access_key" value={web3FormsKey} />
     <input type="hidden" name="subject" value={subjects[formType] || subjects.contact} />
-    <input type="hidden" name="from_name" value="Masa Rotundă Timișoara - Securizat" />
+    <input type="hidden" name="from_name" value="Masa Rotundă Timișoara" />
 
     <!-- Anti-spam Honeypot -->
     <input type="checkbox" name="botcheck" class="sr-only" style="display:none" tabindex="-1" autocomplete="off" />
@@ -273,10 +273,73 @@ const subjects: Record<string, string> = {
       if (spinner) spinner.style.display = 'inline-block';
 
       try {
-        const formData = new FormData(form);
+        const botcheckInput = form.querySelector('input[name="botcheck"]');
+        if (botcheckInput && botcheckInput.checked) {
+          recordSubmission();
+          form.reset();
+          if (alertSuccess) alertSuccess.style.display = 'block';
+          form.style.display = 'none';
+          return;
+        }
+
+        const phoneVal = (document.getElementById(`phone-${formType}`)?.value || '').trim();
+        const ageVal = (document.getElementById(`age-${formType}`)?.value || '').trim();
+        const occupationVal = (document.getElementById(`occupation-${formType}`)?.value || '').trim();
+        const availabilitySelect = document.getElementById(`availability-${formType}`);
+        const availabilityText = availabilitySelect?.options[availabilitySelect.selectedIndex]?.text || '';
+        const availabilityVal = availabilitySelect?.value ? availabilityText : '';
+
+        // Dynamic, crystal-clear email subject
+        let emailSubject = '';
+        if (formType === 'voluntariat') {
+          emailSubject = `🤝 [Voluntariat MRT] Înscriere nouă: ${cleanName}`;
+        } else if (formType === 'parteneriat') {
+          emailSubject = `💼 [Parteneriat MRT] Propunere colaborare: ${cleanName}`;
+        } else {
+          const shortPreview = cleanMessage.length > 55 ? cleanMessage.slice(0, 52) + '...' : cleanMessage;
+          emailSubject = `📬 [Contact MRT] ${cleanName}: "${shortPreview}"`;
+        }
+
+        // Formatted timestamp in Romanian
+        const now = new Date();
+        const formattedDate = new Intl.DateTimeFormat('ro-RO', {
+          dateStyle: 'full',
+          timeStyle: 'medium',
+          timeZone: 'Europe/Bucharest'
+        }).format(now);
+
+        // Professional, elegant payload for incoming email body
+        const payload = new FormData();
+        payload.append('access_key', form.querySelector('input[name="access_key"]')?.value || '');
+        payload.append('from_name', 'Masa Rotundă Timișoara');
+        payload.append('subject', emailSubject);
+        payload.append('replyto', cleanEmail);
+        payload.append('email', cleanEmail);
+
+        // Clean structured labels
+        payload.append('👤 Nume și Prenume', cleanName);
+        payload.append('📧 Adresă Email', cleanEmail);
+        payload.append('📞 Număr Telefon', phoneVal || 'Nespecificat');
+
+        if (showVolunteerFields) {
+          payload.append('🎂 Vârstă', ageVal ? `${ageVal} ani` : 'Nespecificată');
+          payload.append('💼 Profesie / Ocupație', occupationVal || 'Nespecificată');
+          payload.append('🗓️ Disponibilitate Program', availabilityVal || 'Nespecificată');
+        }
+
+        payload.append('💬 Mesaj / Detalii Transmise', cleanMessage);
+
+        let tipFormular = 'Formular de Contact General';
+        if (formType === 'voluntariat') tipFormular = 'Cerere de Înscriere Voluntar';
+        if (formType === 'parteneriat') tipFormular = 'Propunere de Parteneriat / Sponsorizare';
+        payload.append('📌 Categorie Solicitare', tipFormular);
+
+        payload.append('🕒 Data și Ora Înregistrării', formattedDate);
+        payload.append('🌐 Pagină Web Sursă', window.location.href);
+
         const response = await fetch(form.action, {
           method: 'POST',
-          body: formData,
+          body: payload,
           headers: { 'Accept': 'application/json' }
         });
 
