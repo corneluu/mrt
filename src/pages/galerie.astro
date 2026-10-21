@@ -5,7 +5,7 @@ import Hero from '@/components/Hero.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
 import { getCollection } from 'astro:content';
 
-const imaginiGalerie = (await getCollection('galerie')).map(i => i.data);
+const imaginiGalerie = (await getCollection('galerie')).map(i => i.data).sort((a, b) => a.ordine - b.ordine);
 ---
 
 <BaseLayout title="Galerie" description="Imagini din activitățile, proiectele și evenimentele Asociației Masa Rotundă Timișoara.">
