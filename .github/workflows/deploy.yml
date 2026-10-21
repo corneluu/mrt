@@ -39,9 +39,12 @@ jobs:
         run: npm ci
       - name: Build Astro
         run: npm run build
+      # Re-enabling the workflow resets GitHub's 60-day inactivity timer for scheduled runs.
       - name: Keep the nightly schedule alive
         if: github.event_name == 'schedule'
-        uses: gautamkrishnar/keepalive-workflow@v2
+        run: gh api --method PUT "repos/${{ github.repository }}/actions/workflows/deploy.yml/enable"
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
