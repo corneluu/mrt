@@ -4,11 +4,21 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Nightly rebuild to publish content edited in the admin page (01:00 UTC = 03:00/04:00 Romania)
+  schedule:
+    - cron: '0 1 * * *'
 
 permissions:
   contents: read
   pages: write
   id-token: write
+  actions: write  # keepalive: re-enables the schedule GitHub turns off after 60 days without commits
+
+# Public values only (RLS protects the data); secrets never go here.
+env:
+  PUBLIC_SUPABASE_URL: https://afeskorcrokedycjciph.supabase.co
+  PUBLIC_SUPABASE_KEY: sb_publishable_KrVlUg-Wp738FJ98VwbIZQ_Bzw18zbN
+  PUBLIC_TURNSTILE_SITE_KEY: 0x4AAAAAAFfdU2x-TKu306HI
 
 concurrency:
   group: pages
@@ -29,6 +39,9 @@ jobs:
         run: npm ci
       - name: Build Astro
         run: npm run build
+      - name: Keep the nightly schedule alive
+        if: github.event_name == 'schedule'
+        uses: gautamkrishnar/keepalive-workflow@v2
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

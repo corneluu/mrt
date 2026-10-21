@@ -1,6 +1,8 @@
 ---
+import { getSetari } from '@/utils/supabase';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
+const { contact: c } = await getSetari();
 ---
 
 <BaseLayout
@@ -17,7 +19,7 @@ import SectionHeading from '@/components/SectionHeading.astro';
 
         <h2>1. Dispoziții generale</h2>
         <p>
-          Accesul și utilizarea acestui website sunt guvernate de prezenții Termeni și Condiții. Prin navigarea pe acest site, vizitatorii confirmă că au citit, au înțeles și acceptă fără rezerve prevederile de mai jos. Website-ul este administrat de <strong>Asociația Masa Rotundă Timișoara</strong>, cu sediul în Timișoara, Str. Corbului nr. 1.
+          Accesul și utilizarea acestui website sunt guvernate de prezenții Termeni și Condiții. Prin navigarea pe acest site, vizitatorii confirmă că au citit, au înțeles și acceptă fără rezerve prevederile de mai jos. Website-ul este administrat de <strong>Asociația Masa Rotundă Timișoara</strong>, cu sediul în {c.adresa}.
         </p>
 
         <h2>2. Scopul website-ului</h2>
@@ -65,7 +67,7 @@ import SectionHeading from '@/components/SectionHeading.astro';
 
         <h2>10. Contact</h2>
         <p>
-          Pentru orice neclarități legate de Termeni și Condiții, ne puteți scrie la adresa de e-mail: <a href="mailto:mrt@gmail.com">mrt@gmail.com</a>.
+          Pentru orice neclarități legate de Termeni și Condiții, ne puteți scrie la adresa de e-mail: <a href={`mailto:${c.email}`}>{c.email}</a>.
         </p>
       </div>
     </div>

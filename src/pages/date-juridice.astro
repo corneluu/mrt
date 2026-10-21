@@ -1,6 +1,9 @@
 ---
+import { getSetari } from '@/utils/supabase';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
+const { contact: c, juridic: j } = await getSetari();
+const telHref = `tel:${c.telefon.replace(/\s/g, '')}`;
 ---
 
 <BaseLayout
@@ -13,71 +16,66 @@ import SectionHeading from '@/components/SectionHeading.astro';
 
       <div class="card legal-info-card">
         <div class="legal-table">
+          {j.denumire && (
           <div class="legal-row">
             <span class="legal-label">Denumirea completă:</span>
-            <span class="legal-value">
-              <!-- PLACEHOLDER: Denumire completă -->
-              Asociația Masa Rotundă Timișoara
-            </span>
+            <span class="legal-value">{j.denumire}</span>
           </div>
+          )}
 
           <div class="legal-row">
             <span class="legal-label">Forma juridică:</span>
             <span class="legal-value">Organizație neguvernamentală (ONG), persoană juridică română de drept privat fără scop patrimonial</span>
           </div>
 
+          {j.cui && (
           <div class="legal-row">
             <span class="legal-label">Cod de Identificare Fiscală (CUI):</span>
-            <span class="legal-value font-mono">
-              <!-- PLACEHOLDER: CUI -->
-              RO12345678
-            </span>
+            <span class="legal-value font-mono">{j.cui}</span>
           </div>
+          )}
 
+          {j.nr_registru && (
           <div class="legal-row">
             <span class="legal-label">Nr. înregistrare Registrul Asociațiilor:</span>
-            <span class="legal-value font-mono">
-              <!-- PLACEHOLDER: Nr. înregistrare Registrul Asociațiilor -->
-              00/A/2020 (Judecătoria Timișoara)
-            </span>
+            <span class="legal-value font-mono">{j.nr_registru}</span>
           </div>
+          )}
 
           <div class="legal-row">
             <span class="legal-label">Sediul social:</span>
-            <span class="legal-value">Str. Corbului nr. 1, Timișoara, Județul Timiș, Cod Poștal 300236, România</span>
+            <span class="legal-value">{c.adresa}{c.cod_postal && `, Cod Poștal ${c.cod_postal}`}</span>
           </div>
 
+          {j.iban && (
           <div class="legal-row">
             <span class="legal-label">Cont Bancar (IBAN RON):</span>
-            <span class="legal-value font-mono">
-              <!-- PLACEHOLDER: IBAN -->
-              RO49 BTRL 0000 0000 0000 0000
-            </span>
+            <span class="legal-value font-mono">{j.iban}</span>
           </div>
+          )}
 
+          {j.banca && (
           <div class="legal-row">
             <span class="legal-label">Banca:</span>
-            <span class="legal-value">
-              <!-- PLACEHOLDER: Banca -->
-              Banca Transilvania Timișoara
-            </span>
+            <span class="legal-value">{j.banca}</span>
           </div>
+          )}
 
           <div class="legal-row">
             <span class="legal-label">Adresă de e-mail:</span>
-            <span class="legal-value"><a href="mailto:mrt@gmail.com">mrt@gmail.com</a></span>
+            <span class="legal-value"><a href={`mailto:${c.email}`}>{c.email}</a></span>
           </div>
 
           <div class="legal-row">
             <span class="legal-label">Telefon:</span>
-            <span class="legal-value"><a href="tel:0771569557">0771 569 557</a></span>
+            <span class="legal-value"><a href={telHref}>{c.telefon}</a></span>
           </div>
         </div>
 
         <div class="legal-transparency-note">
           <h4>Notă privind transparența și statutul</h4>
           <p>
-            Asociația Masa Rotundă Timișoara activează în conformitate cu Ordonanța Guvernului nr. 26/2000 cu privire la asociații și fundații. Toate activitățile și fondurile sunt administrate exclusiv în vederea atingerii obiectivelor statutare de sprijin comunitar și asistență socială.
+            {j.denumire} activează în conformitate cu Ordonanța Guvernului nr. 26/2000 cu privire la asociații și fundații. Toate activitățile și fondurile sunt administrate exclusiv în vederea atingerii obiectivelor statutare de sprijin comunitar și asistență socială.
           </p>
         </div>
       </div>

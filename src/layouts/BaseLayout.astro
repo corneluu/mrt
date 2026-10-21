@@ -3,6 +3,7 @@ import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import CookieBanner from '@/components/CookieBanner.astro';
 import { getRelativePath } from '@/utils/paths';
+import { getSetari } from '@/utils/supabase';
 import '@/styles/global.css';
 
 interface Props {
@@ -21,6 +22,7 @@ const {
   noindex = false,
 } = Astro.props;
 
+const { contact, social } = await getSetari();
 const siteOrigin = Astro.site ? Astro.site.origin : 'https://corneluu.github.io';
 const resolvedOgImage = getRelativePath(ogImage);
 const fullOgImage = ogImage.startsWith('http') ? ogImage : new URL(resolvedOgImage, siteOrigin).href;
@@ -78,25 +80,20 @@ const fullTitle = title === 'Acasă' ? 'Masa Rotundă Timișoara – Caritate ș
       "description": description,
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Str. Corbului nr. 1",
+        "streetAddress": contact.adresa,
+        "postalCode": contact.cod_postal || undefined,
         "addressLocality": "Timișoara",
         "addressRegion": "Timiș",
         "addressCountry": "RO"
       },
       "contactPoint": {
         "@type": "ContactPoint",
-        "email": "mrt@gmail.com",
-        "telephone": "+40771569557",
+        "email": contact.email,
+        "telephone": contact.telefon.replace(/\s/g, '').replace(/^0/, '+40'),
         "contactType": "customer service",
         "availableLanguage": "Romanian"
       },
-      "sameAs": [
-        "https://www.facebook.com",
-        "https://www.instagram.com",
-        "https://www.tiktok.com",
-        "https://www.youtube.com",
-        "https://www.linkedin.com"
-      ]
+      "sameAs": Object.values(social).filter(Boolean)
     })} />
 
     <!-- Cloudflare Web Analytics (Cookieless, GDPR safe, lightweight) -->

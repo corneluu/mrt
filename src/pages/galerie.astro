@@ -3,17 +3,9 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getRelativePath } from '@/utils/paths';
 import Hero from '@/components/Hero.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
+import { getCollection } from 'astro:content';
 
-const imaginiGalerie = [
-  { src: '/images/galerie/placeholder-1.jpg', alt: 'Distribuire de pachete alimentare și mese calde în Timișoara', titlu: 'Masa Caldă - Acțiune Comunitară' },
-  { src: '/images/galerie/placeholder-2.jpg', alt: 'Atelier educațional de lectură și creație cu copiii', titlu: 'Atelier Educațional' },
-  { src: '/images/galerie/placeholder-3.jpg', alt: 'Voluntari pregătind pachetele de Crăciun pentru familii defavorizate', titlu: 'Campania de Crăciun' },
-  { src: '/images/galerie/placeholder-4.jpg', alt: 'Echipa de voluntari la finalul unei zile de distribuție', titlu: 'Echipa de Voluntari' },
-  { src: '/images/galerie/placeholder-5.jpg', alt: 'Renovare spațiu comunitar dedicat tinerilor', titlu: 'Proiect de Renovare Comunitară' },
-  { src: '/images/galerie/placeholder-6.jpg', alt: 'Donație de rechizite școlare la început de an școlar', titlu: 'Campania Ghiozdanul Plin' },
-  { src: '/images/galerie/placeholder-7.jpg', alt: 'Eveniment caritabil de strângere de fonduri la Timișoara', titlu: 'Gala Caritabilă Anuală' },
-  { src: '/images/galerie/placeholder-8.jpg', alt: 'Distribuire de produse de igienă și asistență pentru vârstnici', titlu: 'Sprijin pentru Bunici' },
-];
+const imaginiGalerie = (await getCollection('galerie')).map(i => i.data);
 ---
 
 <BaseLayout title="Galerie" description="Imagini din activitățile, proiectele și evenimentele Asociației Masa Rotundă Timișoara.">

@@ -1,8 +1,12 @@
 ---
+import { getSetari } from '@/utils/supabase';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/Hero.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
 import ContactForm from '@/components/ContactForm.astro';
+import SocialLinks from '@/components/SocialLinks.astro';
+const { contact: c, social } = await getSetari();
+const telHref = `tel:${c.telefon.replace(/\s/g, '')}`;
 ---
 
 <BaseLayout title="Contact" description="Ia legătura cu Asociația Masa Rotundă Timișoara. Suntem aici pentru întrebări, propuneri de colaborare sau parteneriate.">
@@ -25,9 +29,9 @@ import ContactForm from '@/components/ContactForm.astro';
               <div class="info-icon">📍</div>
               <div class="info-body">
                 <h3>Adresă</h3>
-                <p>Str. Corbului nr. 1, Timișoara, jud. Timiș, România</p>
+                <p>{c.adresa}</p>
                 <a
-                  href="https://www.google.com/maps/search/?api=1&query=Strada+Corbului+1+Timisoara"
+                  href={c.harta_url}
                   target="_blank"
                   rel="noopener noreferrer"
                   class="map-link"
@@ -41,7 +45,7 @@ import ContactForm from '@/components/ContactForm.astro';
               <div class="info-icon">📞</div>
               <div class="info-body">
                 <h3>Telefon</h3>
-                <p><a href="tel:0771569557">0771 569 557</a></p>
+                <p><a href={telHref}>{c.telefon}</a></p>
               </div>
             </div>
 
@@ -49,7 +53,7 @@ import ContactForm from '@/components/ContactForm.astro';
               <div class="info-icon">✉️</div>
               <div class="info-body">
                 <h3>Email</h3>
-                <p><a href="mailto:mrt@gmail.com">mrt@gmail.com</a></p>
+                <p><a href={`mailto:${c.email}`}>{c.email}</a></p>
               </div>
             </div>
 
@@ -57,9 +61,19 @@ import ContactForm from '@/components/ContactForm.astro';
               <div class="info-icon">⏰</div>
               <div class="info-body">
                 <h3>Program de lucru</h3>
-                <p>Luni – Vineri: 09:00 – 17:00<br />Sâmbătă – Duminică: Închis (acțiuni pe teren)</p>
+                <p>{c.program.split('\n').map((linie, i) => <>{i > 0 && <br />}{linie}</>)}</p>
               </div>
             </div>
+
+            {Object.values(social).some(Boolean) && (
+            <div class="card info-card">
+              <div class="info-icon">🌐</div>
+              <div class="info-body">
+                <h3>Social media</h3>
+                <SocialLinks variant="light" />
+              </div>
+            </div>
+            )}
           </div>
 
           <!-- Static Map Placeholder -->
@@ -67,7 +81,7 @@ import ContactForm from '@/components/ContactForm.astro';
             <div class="map-overlay">
               <span>Harta Sediului Asociației</span>
               <a
-                href="https://www.google.com/maps/search/?api=1&query=Strada+Corbului+1+Timisoara"
+                href={c.harta_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 class="btn btn-sm btn-primary"

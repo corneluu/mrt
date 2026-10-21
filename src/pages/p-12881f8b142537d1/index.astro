@@ -1,0 +1,25 @@
+---
+// Admin page. The random path keeps it out of casual view; the login + database
+// security rules are what actually protect the data. Excluded from the sitemap
+// (astro.config.mjs) and not linked from anywhere.
+import 'quill/dist/quill.snow.css';
+import '@/admin/admin.css';
+---
+
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="referrer" content="no-referrer" />
+    <title>MRT Admin</title>
+  </head>
+  <body>
+    <div id="admin-app"><p class="loading">Se încarcă…</p></div>
+    <noscript>Pagina de administrare necesită JavaScript.</noscript>
+    <script>
+      import '@/admin/main';
+    </script>
+  </body>
+</html>

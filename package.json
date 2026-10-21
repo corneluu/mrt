@@ -10,7 +10,13 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.3.0",
+    "@supabase/supabase-js": "^2.118.0",
     "astro": "^5.7.0",
-    "@astrojs/sitemap": "^3.3.0"
+    "quill": "^2.0.3",
+    "sortablejs": "^1.15.7"
+  },
+  "devDependencies": {
+    "@types/sortablejs": "^1.15.9"
   }
 }

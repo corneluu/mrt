@@ -1,6 +1,9 @@
 ---
+import { getSetari } from '@/utils/supabase';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
+const { contact: c } = await getSetari();
+const telHref = `tel:${c.telefon.replace(/\s/g, '')}`;
 ---
 
 <BaseLayout
@@ -13,20 +16,22 @@ import SectionHeading from '@/components/SectionHeading.astro';
       <SectionHeading title="Politica de confidențialitate" subtitle="Informații detaliate privind protecția datelor tale cu caracter personal" />
 
       <div class="legal-prose">
-        <p><strong>Ultima actualizare:</strong> 12 octombrie 2026</p>
+        <p><strong>Ultima actualizare:</strong> 21 octombrie 2026</p>
 
         <h2>1. Introducere și Cine suntem</h2>
         <p>
-          Această politică de confidențialitate explică modul în care <strong>Asociația Masa Rotundă Timișoara</strong> (denumită în continuare „Asociația”, „noi” sau „operatorul”), cu sediul în Str. Corbului nr. 1, Timișoara, județul Timiș, colectează, utilizează și protejează datele dumneavoastră cu caracter personal în conformitate cu Regulamentul General privind Protecția Datelor (GDPR - Regulamentul UE 2016/679) și legislația națională aplicabilă.
+          Această politică de confidențialitate explică modul în care <strong>Asociația Masa Rotundă Timișoara</strong> (denumită în continuare „Asociația”, „noi” sau „operatorul”), cu sediul în {c.adresa}, colectează, utilizează și protejează datele dumneavoastră cu caracter personal în conformitate cu Regulamentul General privind Protecția Datelor (GDPR - Regulamentul UE 2016/679) și legislația națională aplicabilă.
         </p>
 
         <h2>2. Ce date cu caracter personal colectăm</h2>
         <p>Colectăm datele pe care ni le furnizați voluntar atunci când utilizați formularele de pe site, cum ar fi:</p>
         <ul>
-          <li><strong>Formular de contact:</strong> Nume, prenume, adresă de e-mail, număr de telefon, mesajul transmis.</li>
-          <li><strong>Formular de voluntariat:</strong> Nume, prenume, e-mail, telefon, data nașterii (opțional), ocupație, disponibilitate de timp, domenii de interes.</li>
-          <li><strong>Formular de parteneriat:</strong> Nume persoană de contact, companie/organizație reprezentată, e-mail, telefon, detalii propunere.</li>
-          <li><strong>Date de navigare (cookies / analytics):</strong> Adresă IP anonimizată, tipul de browser, pagini vizitate, durată sesiune.</li>
+          <li><strong>Formular de contact:</strong> nume, adresă de e-mail, număr de telefon (opțional), mesajul transmis.</li>
+          <li><strong>Formular de voluntariat:</strong> nume, e-mail, telefon, vârstă, ocupație, disponibilitate de timp și mesajul transmis (câmpurile marcate cu * sunt obligatorii).</li>
+          <li><strong>Formular de parteneriat:</strong> nume, e-mail, telefon (opțional) și detaliile propunerii.</li>
+          <li><strong>Date tehnice la trimiterea unui formular:</strong> pagina de pe care a fost trimis, data și ora, precum și o amprentă criptografică (hash) a adresei IP, folosită exclusiv pentru a limita trimiterile abuzive. Adresa IP propriu-zisă nu este stocată.</li>
+          <li><strong>Verificarea anti-spam:</strong> serviciul Cloudflare Turnstile analizează semnale tehnice ale browserului (de ex. adresa IP, tipul browserului) pentru a deosebi oamenii de programele automate.</li>
+          <li><strong>Date de navigare (statistici):</strong> statistici agregate și anonime de trafic (pagini vizitate, tip de browser), fără cookie-uri de urmărire.</li>
         </ul>
 
         <h2>3. Scopul prelucrării datelor</h2>
@@ -48,12 +53,21 @@ import SectionHeading from '@/components/SectionHeading.astro';
           <li><strong>Interesului legitim</strong> (art. 6 alin. (1) lit. (f) GDPR) de a asigura securitatea platformei online.</li>
         </ul>
 
-        <h2>5. Perioada de stocare a datelor</h2>
+        <h2>5. Cui transmitem datele (împuterniciți)</h2>
+        <p>Nu vindem și nu închiriem datele dumneavoastră. Pentru funcționarea site-ului folosim următorii furnizori, care prelucrează datele doar în numele nostru:</p>
+        <ul>
+          <li><strong>Supabase</strong> – bază de date în care sunt stocate mesajele trimise prin formulare și conținutul site-ului. Serverele sunt situate în Uniunea Europeană (Irlanda). Accesul la mesaje este permis doar administratorilor autorizați ai Asociației, pe bază de cont și parolă.</li>
+          <li><strong>Cloudflare (Turnstile)</strong> – verificare anti-spam a formularelor. Cloudflare poate prelucra date în afara Spațiului Economic European, pe baza mecanismelor de transfer prevăzute de GDPR (Cadrul UE-SUA privind protecția datelor și clauze contractuale standard).</li>
+          <li><strong>Web3Forms</strong> – transmiterea pe e-mail, către Asociație, a mesajelor trimise prin formulare.</li>
+          <li><strong>GitHub Pages</strong> – găzduirea site-ului. Ca orice server web, poate înregistra temporar adresa IP a vizitatorilor din motive de securitate.</li>
+        </ul>
+
+        <h2>6. Perioada de stocare a datelor</h2>
         <p>
-          Păstrăm datele cu caracter personal doar pe perioada necesară îndeplinirii scopurilor pentru care au fost colectate sau conform cerințelor impuse de legislația aplicabilă (ex. legislația financiar-contabilă pentru donații). Datele transmise prin formulare de contact care nu conduc la colaborări viitoare sunt șterse periodic.
+          Păstrăm datele cu caracter personal doar pe perioada necesară îndeplinirii scopurilor pentru care au fost colectate sau conform cerințelor impuse de legislația aplicabilă (ex. legislația financiar-contabilă pentru donații). Mesajele primite prin formulare sunt păstrate până când nu mai sunt necesare sau până la solicitarea dumneavoastră de ștergere. Un mesaj șters este eliminat definitiv din sistem în cel mult 30 de zile.
         </p>
 
-        <h2>6. Drepturile dumneavoastră</h2>
+        <h2>7. Drepturile dumneavoastră</h2>
         <p>Conform GDPR, beneficiați de următoarele drepturi:</p>
         <ul>
           <li><strong>Dreptul de acces:</strong> dreptul de a obține o confirmare că vă prelucrăm datele și o copie a acestora;</li>
@@ -65,20 +79,20 @@ import SectionHeading from '@/components/SectionHeading.astro';
           <li><strong>Dreptul de a depune plângere</strong> la Autoritatea Națională de Supraveghere a Prelucrării Datelor cu Caracter Personal (ANSPDCP - www.dataprotection.ro).</li>
         </ul>
 
-        <h2>7. Politica privind modulele cookie</h2>
+        <h2>8. Politica privind modulele cookie</h2>
         <p>
-          Website-ul nostru utilizează exclusiv module cookie tehnice necesare funcționării optime și, opțional, cookies analitice agregate și anonimizate pentru statistici de trafic. Puteți gestiona sau bloca oricând preferințele pentru cookies direct din setările browserului dumneavoastră.
+          Website-ul nostru nu folosește cookie-uri de publicitate sau de urmărire. Folosim doar stocare tehnică în browser (de ex. pentru a reține alegerea din bannerul de cookie-uri și pentru a preveni trimiterea repetată a formularelor), iar verificarea anti-spam Cloudflare Turnstile poate folosi date tehnice strict necesare funcționării ei. Puteți gestiona sau bloca oricând aceste date din setările browserului dumneavoastră.
         </p>
 
-        <h2>8. Contact Responsabil cu Protecția Datelor (DPO)</h2>
+        <h2>9. Contact Responsabil cu Protecția Datelor (DPO)</h2>
         <p>
           Pentru orice solicitare legată de exercitarea drepturilor dumneavoastră sau întrebări privind protecția datelor, ne puteți contacta la:
         </p>
         <p class="contact-box">
           <strong>Asociația Masa Rotundă Timișoara</strong><br />
-          Adresă: Str. Corbului nr. 1, Timișoara, jud. Timiș<br />
-          Email: <a href="mailto:mrt@gmail.com">mrt@gmail.com</a><br />
-          Telefon: <a href="tel:0771569557">0771 569 557</a>
+          Adresă: {c.adresa}<br />
+          Email: <a href={`mailto:${c.email}`}>{c.email}</a><br />
+          Telefon: <a href={telHref}>{c.telefon}</a>
         </p>
       </div>
     </div>

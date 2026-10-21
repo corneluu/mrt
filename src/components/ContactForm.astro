@@ -1,5 +1,6 @@
 ---
 import { getRelativePath } from '@/utils/paths';
+import { selectRows, getSetari } from '@/utils/supabase';
 
 interface Props {
   formType?: string;
@@ -10,12 +11,22 @@ const { formType = 'contact', showVolunteerFields = false } = Astro.props;
 
 // Web3Forms public form access key
 const web3FormsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY || '03cba418-7ed0-485f-88b6-bcc351cafd78';
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const submitUrl = `${import.meta.env.PUBLIC_SUPABASE_URL}/functions/v1/submit-form`;
 
 const subjects: Record<string, string> = {
   contact: '📬 [Contact MRT] Mesaj nou de la un vizitator',
   voluntariat: '🤝 [Voluntariat MRT] Candidatură nouă de voluntar',
   parteneriat: '💼 [Parteneriat MRT] Propunere nouă de parteneriat',
 };
+
+// Labels, placeholders, required/hidden flags and options are edited in the admin page.
+// Name, email and message are always required (the database enforces them).
+type Camp = { label: string; placeholder: string; required: boolean; hidden: boolean; options?: string[] };
+const [cfg] = await selectRows<{ campuri: Record<string, Camp> }>('setari_formulare', `select=campuri&tip_formular=eq.${formType}`);
+const f = cfg.campuri;
+const show = (name: string) => !f[name]?.hidden;
+const { contact } = await getSetari();
 ---
 
 <div class="form-wrapper">
@@ -24,7 +35,7 @@ const subjects: Record<string, string> = {
   </div>
 
   <div id={`form-alert-error-${formType}`} class="form-alert alert-error" style="display: none;" role="alert">
-    <span class="err-text"><strong>Eroare:</strong> Te rugăm să verifici câmpurile completate sau să ne scrii direct la <a href="mailto:mrt@gmail.com">mrt@gmail.com</a>.</span>
+    <span class="err-text"><strong>Eroare:</strong> Te rugăm să verifici câmpurile completate sau să ne scrii direct la <a href={`mailto:${contact.email}`}>{contact.email}</a>.</span>
   </div>
 
   <form
@@ -32,6 +43,7 @@ const subjects: Record<string, string> = {
     method="POST"
     class="contact-form"
     id={`form-${formType}`}
+    data-submit-url={submitUrl}
     novalidate
     autocomplete="on"
   >
@@ -45,7 +57,7 @@ const subjects: Record<string, string> = {
 
     <div class="form-row">
       <div class="form-group" id={`group-name-${formType}`}>
-        <label for={`name-${formType}`}>Numele complet <span class="required-star">*</span></label>
+        <label for={`name-${formType}`}>{f.name.label} <span class="required-star">*</span></label>
         <input
           type="text"
           id={`name-${formType}`}
@@ -53,14 +65,14 @@ const subjects: Record<string, string> = {
           required
           maxlength="100"
           autocomplete="name"
-          placeholder="ex: Ion Popescu"
+          placeholder={f.name.placeholder}
           aria-describedby={`err-name-${formType}`}
         />
         <span class="field-error-msg" id={`err-name-${formType}`} role="alert">Te rugăm să introduci un nume valid (2-100 caractere).</span>
       </div>
 
       <div class="form-group" id={`group-email-${formType}`}>
-        <label for={`email-${formType}`}>Adresa de email <span class="required-star">*</span></label>
+        <label for={`email-${formType}`}>{f.email.label} <span class="required-star">*</span></label>
         <input
           type="email"
           id={`email-${formType}`}
@@ -68,61 +80,69 @@ const subjects: Record<string, string> = {
           required
           maxlength="120"
           autocomplete="email"
-          placeholder="ex: ion@email.com"
+          placeholder={f.email.placeholder}
           aria-describedby={`err-email-${formType}`}
         />
         <span class="field-error-msg" id={`err-email-${formType}`} role="alert">Te rugăm să introduci o adresă de email validă.</span>
       </div>
     </div>
 
-    <div class="form-group" id={`group-phone-${formType}`}>
-      <label for={`phone-${formType}`}>Număr de telefon</label>
-      <input
-        type="tel"
-        id={`phone-${formType}`}
-        name="phone"
-        maxlength="25"
-        autocomplete="tel"
-        placeholder="ex: 0771 234 567"
-      />
-    </div>
+    {show('phone') && (
+      <div class="form-group" id={`group-phone-${formType}`}>
+        <label for={`phone-${formType}`}>{f.phone.label} {f.phone.required && <span class="required-star">*</span>}</label>
+        <input
+          type="tel"
+          id={`phone-${formType}`}
+          name="phone"
+          maxlength="25"
+          autocomplete="tel"
+          required={f.phone.required}
+          placeholder={f.phone.placeholder}
+        />
+        <span class="field-error-msg" role="alert">Acest câmp este obligatoriu.</span>
+      </div>
+    )}
 
     {showVolunteerFields && (
       <>
         <div class="form-row">
-          <div class="form-group">
-            <label for={`age-${formType}`}>Vârsta</label>
-            <input type="number" id={`age-${formType}`} name="age" min="16" max="100" placeholder="ex: 25" />
-          </div>
-          <div class="form-group">
-            <label for={`occupation-${formType}`}>Ocupația / Profesia</label>
-            <input type="text" id={`occupation-${formType}`} name="occupation" maxlength="80" placeholder="ex: Student, Inginer, Medic" />
-          </div>
+          {show('age') && (
+            <div class="form-group" id={`group-age-${formType}`}>
+              <label for={`age-${formType}`}>{f.age.label} {f.age.required && <span class="required-star">*</span>}</label>
+              <input type="number" id={`age-${formType}`} name="age" min="16" max="100" required={f.age.required} placeholder={f.age.placeholder} />
+              <span class="field-error-msg" role="alert">Acest câmp este obligatoriu.</span>
+            </div>
+          )}
+          {show('occupation') && (
+            <div class="form-group" id={`group-occupation-${formType}`}>
+              <label for={`occupation-${formType}`}>{f.occupation.label} {f.occupation.required && <span class="required-star">*</span>}</label>
+              <input type="text" id={`occupation-${formType}`} name="occupation" maxlength="80" required={f.occupation.required} placeholder={f.occupation.placeholder} />
+              <span class="field-error-msg" role="alert">Acest câmp este obligatoriu.</span>
+            </div>
+          )}
         </div>
-        <div class="form-group">
-          <label for={`availability-${formType}`}>Disponibilitate</label>
-          <select id={`availability-${formType}`} name="availability">
-            <option value="">— Selectează disponibilitatea —</option>
-            <option value="zilele-lucratoare">Zilele lucrătoare (Luni - Vineri)</option>
-            <option value="weekend">În weekend (Sâmbătă - Duminică)</option>
-            <option value="ambele">Oricând / Flexibil</option>
-            <option value="ocazional">Ocazional la evenimente speciale</option>
-          </select>
-        </div>
+        {show('availability') && (
+          <div class="form-group" id={`group-availability-${formType}`}>
+            <label for={`availability-${formType}`}>{f.availability.label} {f.availability.required && <span class="required-star">*</span>}</label>
+            <select id={`availability-${formType}`} name="availability" required={f.availability.required}>
+              <option value="">{f.availability.placeholder}</option>
+              {(f.availability.options ?? []).map(opt => <option value={opt}>{opt}</option>)}
+            </select>
+            <span class="field-error-msg" role="alert">Acest câmp este obligatoriu.</span>
+          </div>
+        )}
       </>
     )}
 
     <div class="form-group" id={`group-message-${formType}`}>
-      <label for={`message-${formType}`}>Mesajul tău <span class="required-star">*</span></label>
+      <label for={`message-${formType}`}>{f.message.label} <span class="required-star">*</span></label>
       <textarea
         id={`message-${formType}`}
         name="message"
         required
         rows="5"
         maxlength="3000"
-        placeholder={showVolunteerFields
-          ? 'Spune-ne câteva cuvinte despre tine, de ce dorești să fii voluntar și în ce proiecte te-ai implica...'
-          : 'Scrie mesajul sau întrebarea ta aici...'}
+        placeholder={f.message.placeholder}
         aria-describedby={`err-message-${formType}`}
       ></textarea>
       <span class="field-error-msg" id={`err-message-${formType}`} role="alert">Mesajul trebuie să aibă între 10 și 3.000 caractere.</span>
@@ -139,12 +159,17 @@ const subjects: Record<string, string> = {
       <span class="field-error-msg" id={`err-gdpr-${formType}`} role="alert">Acordul GDPR este obligatoriu.</span>
     </div>
 
+    <!-- Cloudflare Turnstile anti-spam check (verified by the submit-form function) -->
+    <div class="cf-turnstile" data-sitekey={turnstileKey} data-language="ro"></div>
+
     <button type="submit" class="btn btn-primary btn-submit" id={`submit-btn-${formType}`}>
       <span class="btn-text">{showVolunteerFields ? 'Trimite cererea de voluntariat' : 'Trimite mesajul'}</span>
       <span class="spinner" style="display: none;" aria-hidden="true"></span>
     </button>
   </form>
 </div>
+
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <script define:vars={{ formType, showVolunteerFields }}>
   const form = document.getElementById(`form-${formType}`);
@@ -252,14 +277,29 @@ const subjects: Record<string, string> = {
       const isGdprValid = gdprInput ? gdprInput.checked : true;
       if (!checkField(gdprInput, isGdprValid, `group-gdpr-${formType}`)) isFormValid = false;
 
+      // Optional fields that the admin marked as required
+      ['phone', 'age', 'occupation', 'availability'].forEach((name) => {
+        const el = document.getElementById(`${name}-${formType}`);
+        if (el?.required && !checkField(el, el.value.trim() !== '', `group-${name}-${formType}`)) isFormValid = false;
+      });
+
       if (!isFormValid) {
         if (alertError) {
           alertError.innerHTML = '<strong>Eroare:</strong> Te rugăm să corectezi câmpurile marcate cu roșu.';
           alertError.style.display = 'block';
         }
         if (alertSuccess) alertSuccess.style.display = 'none';
-        const firstError = form.querySelector('.has-error input, .has-error textarea');
+        const firstError = form.querySelector('.has-error input, .has-error textarea, .has-error select');
         firstError?.focus();
+        return;
+      }
+
+      const turnstileToken = form.querySelector('input[name="cf-turnstile-response"]')?.value || '';
+      if (!turnstileToken) {
+        if (alertError) {
+          alertError.innerHTML = '<strong>Așteaptă o clipă:</strong> verificarea anti-spam nu s-a finalizat încă. Încearcă din nou în câteva secunde.';
+          alertError.style.display = 'block';
+        }
         return;
       }
 
@@ -288,6 +328,36 @@ const subjects: Record<string, string> = {
         const availabilitySelect = document.getElementById(`availability-${formType}`);
         const availabilityText = availabilitySelect?.options[availabilitySelect.selectedIndex]?.text || '';
         const availabilityVal = availabilitySelect?.value ? availabilityText : '';
+
+        // 1. Save to the database (Supabase function checks Turnstile, validates, rate-limits)
+        const dbResponse = await fetch(form.dataset.submitUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tip_formular: formType,
+            nume: cleanName,
+            email: cleanEmail,
+            telefon: phoneVal,
+            mesaj: cleanMessage,
+            varsta: ageVal,
+            ocupatie: occupationVal,
+            disponibilitate: availabilityVal,
+            pagina: window.location.href,
+            turnstile: turnstileToken,
+          }),
+        }).catch(() => null);
+        const dbData = await dbResponse?.json().catch(() => null);
+
+        // Rejected on purpose (spam check, invalid data, too many messages): don't email it either.
+        if (dbResponse && dbResponse.status >= 400 && dbResponse.status < 500) {
+          if (alertError) {
+            alertError.textContent = dbData?.message || 'Mesajul nu a putut fi trimis.';
+            alertError.style.display = 'block';
+          }
+          window.turnstile?.reset();
+          return;
+        }
+        const savedInDb = !!dbResponse?.ok;
 
         // Dynamic, crystal-clear email subject
         let emailSubject = '';
@@ -337,15 +407,16 @@ const subjects: Record<string, string> = {
         payload.append('🕒 Data și Ora Înregistrării', formattedDate);
         payload.append('🌐 Pagină Web Sursă', window.location.href);
 
+        // 2. Email notification via Web3Forms. The message counts as sent if either step worked.
         const response = await fetch(form.action, {
           method: 'POST',
           body: payload,
           headers: { 'Accept': 'application/json' }
-        });
+        }).catch(() => null);
 
-        const data = await response.json().catch(() => null);
+        const data = await response?.json().catch(() => null);
 
-        if (response.ok && data?.success !== false) {
+        if ((response?.ok && data?.success !== false) || savedInDb) {
           recordSubmission();
           form.reset();
           if (alertSuccess) {
@@ -356,10 +427,10 @@ const subjects: Record<string, string> = {
           form.style.display = 'none';
         } else {
           if (alertError) {
-            const errorMsg = data?.message || 'A apărut o problemă la transmiterea formularului. Te rugăm să încerci din nou sau să ne scrii direct la email.';
-            alertError.innerHTML = `<strong>Eroare:</strong> ${errorMsg}`;
+            alertError.textContent = 'Eroare: ' + (data?.message || 'A apărut o problemă la transmiterea formularului. Te rugăm să încerci din nou sau să ne scrii direct la email.');
             alertError.style.display = 'block';
           }
+          window.turnstile?.reset();
         }
       } catch (err) {
         if (alertError) {

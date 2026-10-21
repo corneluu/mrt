@@ -1,4 +1,5 @@
 ---
+import { getSetari } from '@/utils/supabase';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getRelativePath } from '@/utils/paths';
 import Hero from '@/components/Hero.astro';
@@ -10,6 +11,8 @@ const distributieFonduri = [
   { domeniu: 'Sănătate și caravane medicale', procent: 15, culoare: '#D4A843', descriere: 'Consultații medicale gratuite în zonele rurale defavorizate.' },
   { domeniu: 'Logistică și administrare', procent: 5, culoare: '#718096', descriere: 'Costuri minime de transport, depozitare și organizare.' },
 ];
+const { contact: c, juridic: j } = await getSetari();
+const telHref = `tel:${c.telefon.replace(/\s/g, '')}`;
 ---
 
 <BaseLayout title="Donații" description="Susține asociația Masa Rotundă Timișoara prin donație bancară directă, redirecționarea a 3,5% din impozit sau sponsorizare corporate.">
@@ -55,7 +58,7 @@ const distributieFonduri = [
         <div class="card-top-bar">
           <div class="bank-title-box">
             <span class="badge-official">Cont Oficial Organizație</span>
-            <h3>Asociația Masa Rotundă Timișoara</h3>
+            <h3>{j.denumire}</h3>
           </div>
           <span class="currency-badge">MONEDĂ: LEI (RON)</span>
         </div>
@@ -64,43 +67,51 @@ const distributieFonduri = [
           <div class="bank-row">
             <span class="row-label">Beneficiar</span>
             <div class="row-content">
-              <strong>Asociația Masa Rotundă Timișoara</strong>
-              <button type="button" class="mini-copy-btn" data-copy="Asociația Masa Rotundă Timișoara" aria-label="Copiază numele beneficiarului">
+              <strong>{j.denumire}</strong>
+              <button type="button" class="mini-copy-btn" data-copy={j.denumire} aria-label="Copiază numele beneficiarului">
                 Copiază
               </button>
             </div>
           </div>
 
+          {j.cui && (
           <div class="bank-row">
             <span class="row-label">Cod Fiscal (CUI)</span>
             <div class="row-content">
-              <code class="code-val" id="cuiValue">RO12345678</code>
-              <button type="button" class="mini-copy-btn" data-copy="RO12345678" aria-label="Copiază Codul Fiscal">
+              <code class="code-val" id="cuiValue">{j.cui}</code>
+              <button type="button" class="mini-copy-btn" data-copy={j.cui} aria-label="Copiază Codul Fiscal">
                 Copiază
               </button>
             </div>
           </div>
+          )}
 
+          {j.banca && (
           <div class="bank-row">
             <span class="row-label">Banca</span>
             <div class="row-content">
-              <span>Banca Transilvania – Sucursala Timișoara</span>
+              <span>{j.banca}</span>
             </div>
           </div>
+          )}
 
           <!-- Highlight IBAN box with primary 1-tap copy -->
           <div class="iban-major-box">
             <div class="iban-header">
               <span class="iban-title">CONT IBAN (RON)</span>
-              <span class="copy-feedback" id="ibanStatusText">Apasă pentru copiere rapidă</span>
+              {j.iban && <span class="copy-feedback" id="ibanStatusText">Apasă pentru copiere rapidă</span>}
             </div>
+            {j.iban ? (
             <div class="iban-action-row">
-              <code class="iban-code" id="mainIbanCode">RO49 BTRL 0000 0000 0000 0000</code>
+              <code class="iban-code" id="mainIbanCode">{j.iban}</code>
               <button type="button" class="btn btn-primary btn-copy-large" id="mainCopyIbanBtn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
                 <span class="btn-text">Copiază IBAN</span>
               </button>
             </div>
+            ) : (
+            <p>Contul IBAN va fi publicat în curând. Până atunci, scrie-ne la <a href={`mailto:${c.email}`}>{c.email}</a>.</p>
+            )}
           </div>
 
           <div class="bank-row note-row">
@@ -116,7 +127,7 @@ const distributieFonduri = [
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
             Cont bancar verificat și înregistrat la Registrul Asociațiilor
           </div>
-          <p class="receipt-note">Pentru eliberarea unei chitanțe sau adeverințe de donație, scrie-ne la <a href="mailto:mrt@gmail.com">mrt@gmail.com</a>.</p>
+          <p class="receipt-note">Pentru eliberarea unei chitanțe sau adeverințe de donație, scrie-ne la <a href={`mailto:${c.email}`}>{c.email}</a>.</p>
         </div>
       </div>
     </div>
@@ -151,16 +162,16 @@ const distributieFonduri = [
           <div class="step-card">
             <span class="step-num">3</span>
             <strong>Trimite formularul</strong>
-            <p>Online prin SPV (ANAF) sau ni-l poți trimite nouă pe email la <a href="mailto:mrt@gmail.com">mrt@gmail.com</a> și îl depunem noi.</p>
+            <p>Online prin SPV (ANAF) sau ni-l poți trimite nouă pe email la <a href={`mailto:${c.email}`}>{c.email}</a> și îl depunem noi.</p>
           </div>
         </div>
 
         <div class="redirect-info-box">
           <div class="info-title">Datele asociației pentru Formularul 230:</div>
           <div class="info-grid">
-            <div><strong>Entitate:</strong> Asociația Masa Rotundă Timișoara</div>
-            <div><strong>CUI:</strong> RO12345678</div>
-            <div><strong>Cont IBAN:</strong> RO49 BTRL 0000 0000 0000 0000</div>
+            <div><strong>Entitate:</strong> {j.denumire}</div>
+            {j.cui && <div><strong>CUI:</strong> {j.cui}</div>}
+            {j.iban && <div><strong>Cont IBAN:</strong> {j.iban}</div>}
           </div>
         </div>
 
@@ -240,7 +251,7 @@ const distributieFonduri = [
         <p>Conform Codului Fiscal, firmele pot sponsoriza asociații fără niciun cost suplimentar, scăzând suma direct din impozitul pe profit/venit datorat.</p>
         <div class="sponsor-actions">
           <a href={getRelativePath('/contact/')} class="btn btn-primary">Solicită contract de sponsorizare</a>
-          <a href="tel:0771569557" class="btn btn-secondary">Sună la 0771 569 557</a>
+          <a href={telHref} class="btn btn-secondary">Sună la {c.telefon}</a>
         </div>
       </div>
     </div>

@@ -7,6 +7,13 @@ import { getCollection } from 'astro:content';
 
 const membriEchipa = await getCollection('echipa');
 const sortatEchipa = membriEchipa.sort((a, b) => (a.data.ordine ?? 99) - (b.data.ordine ?? 99));
+const voluntari = await getCollection('voluntari');
+const sortatVoluntari = voluntari.sort((a, b) => (a.data.ordine ?? 99) - (b.data.ordine ?? 99));
+
+const sectiuniOameni = [
+  { titlu: 'Echipa noastră', subtitlu: 'Oamenii pasionați din spatele inițiativelor Masa Rotundă', membri: sortatEchipa, clasa: '' },
+  { titlu: 'Voluntari', subtitlu: 'Oamenii care dăruiesc timp și energie pentru comunitate', membri: sortatVoluntari, clasa: 'bg-alt' },
+];
 
 const timeline = [
   { an: '2020', titlu: 'Înființare', descriere: 'Un grup de tineri profesioniști din Timișoara decid să pună bazele asociației pentru a sprijini comunitățile defavorizate.' },
@@ -68,12 +75,13 @@ const timeline = [
     </div>
   </section>
 
-  <!-- Echipa -->
-  <section class="section">
+  <!-- Echipa & Voluntari -->
+  {sectiuniOameni.map(sectiune => (
+  <section class={`section ${sectiune.clasa}`}>
     <div class="container">
-      <SectionHeading title="Echipa noastră" subtitle="Oamenii pasionați din spatele inițiativelor Masa Rotundă" />
+      <SectionHeading title={sectiune.titlu} subtitle={sectiune.subtitlu} />
       <div class="grid-3 team-grid">
-        {sortatEchipa.map(membru => (
+        {sectiune.membri.map(membru => (
           <div class="card team-card">
             <div class="team-avatar-wrapper">
               {membru.data.imagine ? (
@@ -94,9 +102,10 @@ const timeline = [
       </div>
     </div>
   </section>
+  ))}
 
   <!-- Timeline / Istorie -->
-  <section class="section bg-alt">
+  <section class="section">
     <div class="container content-container">
       <SectionHeading title="Istoricul asociației" subtitle="Etapele dezvoltării noastre din 2020 până în prezent" />
       <div class="timeline">
